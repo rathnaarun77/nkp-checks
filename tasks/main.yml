@@ -84,7 +84,7 @@
     networks:
       - is_connected: true
         subnet:
-          name: "{{ NKP_CONTROL_PLANE_SUBNET }}"
+          name: "{{ CONTROL_SUBNET }}"
     disks:
       - type: "DISK"
         size_gb: 20
@@ -132,7 +132,7 @@
     networks:
       - is_connected: true
         subnet:
-          name: "{{ NKP_CONTROL_PLANE_SUBNET }}"
+          name: "{{ WORKER_SUBNET }}"
     disks:
       - type: "DISK"
         size_gb: 20
