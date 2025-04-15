@@ -8,13 +8,17 @@
     nutanix_password: "{{ NUTANIX_PASSWORD }}"
     validate_certs: false
     filter:
-      name: "{{ NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME }}"
+      name: "{{ IMAGE_NAME }}"
   register: image_result
 
 - name: Debug image check output
   debug:
     var: image_result
 
+- name: Render JSON template
+  template:
+    src: nkp-checks/templates/cloud_init.yml.j2
+    dest: ./cloud_init.yml
 
 - name: Upload NKP image to PC if not present
   nutanix.ncp.ntnx_images:
@@ -26,7 +30,7 @@
     source_uri: "{{ image_url }}"
     clusters:
       - name: "{{ NUTANIX_PRISM_ELEMENT_CLUSTER_NAME }}"
-    name: "{{ NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME }}"
+    name: "{{ IMAGE_NAME }}"
     desc: "Image uploaded for NKP deploy by Ansible"
     image_type: "DISK_IMAGE"
     wait: true
@@ -63,12 +67,6 @@
     - (worker_vm.response.metadata.length) > 0
 
 
-- name: Template cloud init file
-  ansible.builtin.template:
-    src: nkp-checks/templates/cloud_init.yml.j2
-    dest: nkp-checks/files/cloud_init.yml
-
-
 # create a test vm in controlplane subnet 
 - name: Create a VM in controlplane subnet
   nutanix.ncp.ntnx_vms:
@@ -89,14 +87,14 @@
       - type: "DISK"
         size_gb: 20
         clone_image:
-          name: "{{ NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME }}"
+          name: "{{ IMAGE_NAME }}"
         bus: "SCSI"
     vcpus: 4
     cores_per_vcpu: 1
     memory_gb: 8
     guest_customization:
       type: "cloud_init"
-      script_path: "nkp-checks/files/cloud_init.yml"
+      script_path: "./cloud_init.yml"
       is_overridable: true
   register: controlvm_out
 
@@ -137,14 +135,14 @@
       - type: "DISK"
         size_gb: 20
         clone_image:
-          name: "{{ NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME }}"
+          name: "{{ IMAGE_NAME }}"
         bus: "SCSI"
     vcpus: 4
     cores_per_vcpu: 1
     memory_gb: 8
     guest_customization:
       type: "cloud_init"
-      script_path: "nkp-checks/files/cloud_init.yml"
+      script_path: "./cloud_init.yml"
       is_overridable: true
   register: workervm_out
 
@@ -169,7 +167,7 @@
 - name: Render JSON template
   template:
     src: nkp-checks/templates/port-check-input.json.j2
-    dest: nkp-checks/files/port-check-input.json
+    dest: ./port-check-input.json
 
 - name: Wait for test VMs to be ready
   ansible.builtin.pause:
@@ -229,7 +227,7 @@
   loop:
     - { src: 'templates/port-check.py', dest: '/tmp/port-check.py' }
     - { src: 'templates/udp_log_parser.py', dest: '/tmp/udp_log_parser.py' }
-    - { src: 'files/port-check-input.json', dest: '/tmp/port-check-input.json' }
+    - { src: './port-check-input.json', dest: '/tmp/port-check-input.json' }
   become: true
   delegate_to: "{{ groups['nkp_control'][0] }}"
 
@@ -241,14 +239,19 @@
   loop:
     - { src: 'templates/port-check.py', dest: '/tmp/port-check.py' }
     - { src: 'templates/udp_log_parser.py', dest: '/tmp/udp_log_parser.py' }
-    - { src: 'files/port-check-input.json', dest: '/tmp/port-check-input.json' }
+    - { src: './port-check-input.json', dest: '/tmp/port-check-input.json' }
   become: true
   delegate_to: "{{ groups['nkp_worker'][0] }}"
 
-- name: cleanup the port-check-input.json
+- name: Cleanup files on the local host
   ansible.builtin.file:
-    path: files/port-check-input.json
+    path: "{{ item }}"
     state: absent
+  loop:
+    - ./port-check-input.json
+    - ./cloud_init.yml
+  delegate_to: localhost
+  run_once: true
 
 #check connectivity from control
 - name: Run port check script on control VM 
