@@ -290,22 +290,6 @@
   delegate_to: "{{ groups['nkp_control'][0] }}"
 
 
-- name: print the sample results
-  debug:
-    var: control_tcp_out
-
-- name: print the sample results
-  debug:
-    var: control_udp_out
-
-- name: print the sample results
-  debug:
-    var: worker_tcp_out
-
-- name: print the sample results
-  debug:
-    var: worker_udp_out
-
 - name: Combine all connection outputs into one list
   set_fact:
     connections: >-
@@ -320,13 +304,6 @@
   template:
     src: templates/nkp_checks_output.htm.j2
     dest: ./nkp_checks_report.html
-
-#- name: Create HTML report for port check results
-#  ansible.builtin.template:
-#    src: nkp_checks_output.htm.j2
-#    dest: ./nkp_checks_report.html
-#  vars:
-#    port_check_results: "{{ port_check_results }}"
 
 
 #Cleanup the created VMs

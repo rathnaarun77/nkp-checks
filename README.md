@@ -52,7 +52,7 @@ Since we are deploying in a Nutanix environment, install the `nutanix.ncp` ansib
     ansible-playbook -i inventory.ini playbook.yml
     ```
 
-5. Once the playbook completes without any errors, you will get the NKP dashboard URL and the login credentials as output of the final task.
+5. Once the playbook completes without any errors, you will get the final nkp_checks_report.html in the same directory.
 
 Disclaimer:
 
