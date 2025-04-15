@@ -1,0 +1,15 @@
+---
+# vars file for nkp-checks
+image_url: "https://download.nutanix.com/downloads/nkp/v2.12.2/nkp-rocky-9.4-release-1.29.9-20241008013213.qcow2?Expires=1741813144&Key-Pair-Id=APKAJTTNCWPEI42QKMSA&Signature=AYMBJP3xehzUNSIHenznGu-fvVGGp-P2JPY~3vfCukRCZc5RXoMn7-sS-OqKpOEN6nabrng4sxgKzznAfFO5KmEWesn0dkSvs40XGzEuaTG15vUupSs-WyFGQsHWkFiM8FtAKEJWXzZ1rt~7o-F2pAcw9jI8x1-RLSmjeBl5b3eSJoVPtj1AnLk5XRNbGe~BuLLKZe-CA~VroMDDSGA5aZQebEhinBP76Yses3Sk4GnN4CBWilNHaTCy3FBpa71Hmixc~R~A9XCk1k5dLCHVJcW7grfFTxg3AEvBgikuhPcMCtqM5U4WKtxi2fc72rkTrVTFhDCS5xdDcblkjwDlsg__"
+SSH_PUBLIC_KEY: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDIc4TD2hzbvpO1WhQ6W36eP+3Ixnzq9UO764dm7H+7skBXGSYuUSgsZwzVQ40/III/yGsuN+/XZ0ZDgacaxBTThKMqpqm5nlJjrR5r/OEAE1bIaMJ6BGvZaWu+EYifnCyTcauuAFXiHn4KFHzkpLPGry27nbHJ/hffS8zf6P+uVZZwXsatTfUyh6uvDXVIY1An6VEHS16KxiVcGe5lRk2tXv3Hnn1S75zsmc3vdNTISqN8kZRK/EF3bMSm+cdpSort1JmR0Kca81T69MCJMYY2C+RG67MlJTrsJgNDBkA2N4sB9kqneZGuhoH5P2gqauvm+sjTIoYNBHLT9hRRa8WYlxhOCpFO5fz29wmiOQGgo6URaE1xig3UiBWwaF3hlNpq6lYlMYkAkRfoggrd267Q9Qmmia6+fqNE8rg+wnINugUSCtQao+Bsr+77FynBfzEMkskJ4X/V7rZWaBVlgvoxAxrkFHmnY2CIB7RrrYzUDrvJMXQR484NoCCGdPO+9f8="                                     # NKP version to install
+CLUSTER_NAME: nkp-by-ansible                                       # NKP cluster name. When using NKP Pro/Ultimate, this name is used to generate the license key
+NUTANIX_USER: admin                                     # Prism Central username
+NUTANIX_PASSWORD: 'nx2Tech243!'                                  # Keep the password enclosed between single quotes - Ex: 'password'
+NUTANIX_ENDPOINT: 10.38.83.7                                      # Prism Central IP address
+NUTANIX_PORT: 9440                                        # Prism Central port (default: 9440)                                          
+NUTANIX_PRISM_ELEMENT_CLUSTER_NAME: "APAC-DC"                       # Prism Element cluster name - Ex: PHX-POC207
+NKP_CONTROL_PLANE_SUBNET: primary-PHX-POC311                                   # Ex: primary
+NUTANIX_STORAGE_CONTAINER_NAME: SelfServiceContainer      # Change to your preferred Prism storage container
+REGISTRY_MIRROR_URL: registry.nutanixdemo.com/docker.io   # Required on Nutanix HPOC
+NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME: "nkp-rocky-9.5-release-1.31.4-20250214003015.qcow2"
+dsip: "10.38.83.38"

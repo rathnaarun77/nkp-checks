@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NKP Port Checks Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        h2 { color: #2F4F4F; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .state-open { color: green; font-weight: bold; }
+        .state-closed { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h2>NKP Port Check Report</h2>
+    <table>
+        <tr>
+            <th>Source</th>
+            <th>Destination</th>
+            <th>Protocol</th>
+            <th>Port</th>
+            <th>State</th>
+        </tr>
+        {% for conn in connections %}
+        <tr>
+            <td>{{ conn.source }}</td>
+            <td>{{ conn.destination }}</td>
+            <td>{{ conn.protocol }}</td>
+            <td>{{ conn.port }}</td>
+            <td class="state-{{ conn.state | lower }}">{{ conn.state }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,8 @@
+---
+# defaults file for nkp-checks
+#worker_port: "tcp:10250,tcp:7946,udp:7946,tcp:4240"
+#control_port: "tcp:10250,udp:8472,tcp:7946,udp:7946,tcp:4240"
+#control_control_port: "tcp:2380"
+#pc_port: "tcp:9440"
+worker_udp: "7946"
+control_udp: "8472,7946"

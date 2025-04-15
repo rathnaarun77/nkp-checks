@@ -1,0 +1,347 @@
+---
+# tasks file for nkp-checks
+
+- name: Check if NKP rock image is present
+  nutanix.ncp.ntnx_images_info:
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    filter:
+      name: "{{ NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME }}"
+  register: image_result
+
+- name: Debug image check output
+  debug:
+    var: image_result
+
+
+- name: Upload NKP image to PC if not present
+  nutanix.ncp.ntnx_images:
+    state: "present"
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    source_uri: "{{ image_url }}"
+    clusters:
+      - name: "{{ NUTANIX_PRISM_ELEMENT_CLUSTER_NAME }}"
+    name: "{{ NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME }}"
+    desc: "Image uploaded for NKP deploy by Ansible"
+    image_type: "DISK_IMAGE"
+    wait: true
+  when: image_result.response.metadata.length == 0
+
+
+- name: Check if test control VM exists
+  nutanix.ncp.ntnx_vms_info:
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    filter:
+      vm_name: "nkp_control_test"
+    kind: vm
+  register: control_vm
+
+- name: Check if test worker VM exists
+  nutanix.ncp.ntnx_vms_info:
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    filter:
+      vm_name: "nkp_worker_test"
+    kind: vm
+  register: worker_vm
+
+- name: Fail execution if either VM exists
+  fail:
+    msg: "One or both of the VMs (nkp_control_test or nkp_worker_test) already exist. Please delete the VMs and retry."
+  when: 
+    - (control_vm.response.metadata.length) > 0
+    - (worker_vm.response.metadata.length) > 0
+
+
+- name: Template cloud init file
+  ansible.builtin.template:
+    src: nkp-checks/templates/cloud_init.yml.j2
+    dest: nkp-checks/files/cloud_init.yml
+
+
+# create a test vm in controlplane subnet 
+- name: Create a VM in controlplane subnet
+  nutanix.ncp.ntnx_vms:
+    state: present
+    name: "nkp_control_test"
+    timezone: "UTC"
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    cluster:
+      name: "{{ NUTANIX_PRISM_ELEMENT_CLUSTER_NAME }}"
+    networks:
+      - is_connected: true
+        subnet:
+          name: "{{ NKP_CONTROL_PLANE_SUBNET }}"
+    disks:
+      - type: "DISK"
+        size_gb: 20
+        clone_image:
+          name: "{{ NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME }}"
+        bus: "SCSI"
+    vcpus: 4
+    cores_per_vcpu: 1
+    memory_gb: 8
+    guest_customization:
+      type: "cloud_init"
+      script_path: "nkp-checks/files/cloud_init.yml"
+      is_overridable: true
+  register: controlvm_out
+
+- name: Extract control VM IP address
+  set_fact:
+    controlvm_ip: "{{ controlvm_out.response.spec.resources.nic_list[0].ip_endpoint_list[0].ip }}"
+  when: controlvm_out.changed
+
+
+- name: Add new control VM to in-memory inventory
+  ansible.builtin.add_host:
+    name: nkp_control_test
+    groups: nkp_control
+    ansible_host: "{{ controlvm_ip }}"
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    ansible_user: nutanix
+
+- name: Refresh inventory
+  ansible.builtin.meta: refresh_inventory
+
+#creating a test VM in nkp worker subnet
+- name: Create a VM in worker subnet
+  nutanix.ncp.ntnx_vms:
+    state: present
+    name: "nkp_worker_test"
+    timezone: "UTC"
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    cluster:
+      name: "{{ NUTANIX_PRISM_ELEMENT_CLUSTER_NAME }}"
+    networks:
+      - is_connected: true
+        subnet:
+          name: "{{ NKP_CONTROL_PLANE_SUBNET }}"
+    disks:
+      - type: "DISK"
+        size_gb: 20
+        clone_image:
+          name: "{{ NUTANIX_MACHINE_TEMPLATE_IMAGE_NAME }}"
+        bus: "SCSI"
+    vcpus: 4
+    cores_per_vcpu: 1
+    memory_gb: 8
+    guest_customization:
+      type: "cloud_init"
+      script_path: "nkp-checks/files/cloud_init.yml"
+      is_overridable: true
+  register: workervm_out
+
+
+- name: Extract worker VM IP address
+  set_fact:
+    workervm_ip: "{{ workervm_out.response.spec.resources.nic_list[0].ip_endpoint_list[0].ip }}"
+  when: workervm_out.changed
+
+
+- name: Add new worker VM to in-memory inventory
+  ansible.builtin.add_host:
+    name: nkp_worker_test
+    groups: nkp_worker
+    ansible_host: "{{ workervm_ip }}"
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    ansible_user: nutanix
+
+- name: Refresh inventory
+  ansible.builtin.meta: refresh_inventory
+
+- name: Render JSON template
+  template:
+    src: nkp-checks/templates/port-check-input.json.j2
+    dest: nkp-checks/files/port-check-input.json
+
+- name: Wait for test VMs to be ready
+  ansible.builtin.pause:
+    seconds: 30
+  delegate_to: "{{ groups['nkp_control'][0] }}"
+
+# Install netcat on both control and worker VMs
+- name: Install netcat (nmap-ncat) on control test VM
+  yum:
+    name: nmap-ncat
+    state: present
+  delegate_to: "{{ groups['nkp_control'][0] }}"
+  become: true
+
+- name: Install netcat (nmap-ncat) on worker test VM
+  yum:
+    name: nmap-ncat
+    state: present
+  delegate_to: "{{ groups['nkp_worker'][0] }}"
+  become: true
+
+#create listeners on control VM
+- name: Creating listeners on control VM
+  ansible.builtin.shell: |
+    nohup bash -c '
+      nc -lk 10250 &
+      nc -lu 0.0.0.0 8472 &
+      nc -lk 7946 &
+      nc -lu 0.0.0.0 7946 &
+      nc -lk 2380 &
+      nc -lk 4240 &
+      nc -lk 443 &
+    ' > /tmp/netcat-listeners.log 2>&1 &
+  become: true
+  delegate_to: "{{ groups['nkp_control'][0] }}"
+
+
+# Create netcat listeners on worker VM
+- name: Creating listeners on worker VM
+  ansible.builtin.shell: |
+    nohup bash -c '
+      nc -lk 10250 & 
+      nc -lk 7946 & 
+      nc -lu 0.0.0.0 7946 &
+      nc -lk 4240 &
+      nc -lk 443 &
+    ' > /tmp/netcat-listeners.log 2>&1 &
+  become: true
+  delegate_to: "{{ groups['nkp_worker'][0] }}"
+
+#copy the python scripts
+- name: Copy port check and UDP parser scripts to control VM
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: '0755'
+  loop:
+    - { src: 'templates/port-check.py', dest: '/tmp/port-check.py' }
+    - { src: 'templates/udp_log_parser.py', dest: '/tmp/udp_log_parser.py' }
+    - { src: 'files/port-check-input.json', dest: '/tmp/port-check-input.json' }
+  become: true
+  delegate_to: "{{ groups['nkp_control'][0] }}"
+
+- name: Copy port check and UDP parser scripts to worker VM
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: '0755'
+  loop:
+    - { src: 'templates/port-check.py', dest: '/tmp/port-check.py' }
+    - { src: 'templates/udp_log_parser.py', dest: '/tmp/udp_log_parser.py' }
+    - { src: 'files/port-check-input.json', dest: '/tmp/port-check-input.json' }
+  become: true
+  delegate_to: "{{ groups['nkp_worker'][0] }}"
+
+- name: cleanup the port-check-input.json
+  ansible.builtin.file:
+    path: files/port-check-input.json
+    state: absent
+
+#check connectivity from control
+- name: Run port check script on control VM 
+  ansible.builtin.command: >
+    /tmp/port-check.py /tmp/port-check-input.json controlplane
+  register: control_tcp_out   #for internal
+  changed_when: false
+  become: true
+  delegate_to: "{{ groups['nkp_control'][0] }}"
+
+#for UDP ports, check if the message reached the worker
+- name: Run udp log parser to check udp ports from control to worker 
+  ansible.builtin.command: >
+    /tmp/udp_log_parser.py controlplane({{ controlvm_ip }}) worker({{ workervm_ip}}) {{ worker_udp }}
+  register: worker_udp_out  
+  changed_when: false
+  become: true
+  delegate_to: "{{ groups['nkp_worker'][0] }}"
+
+#check connectivity from worker
+- name: Run port check script on worker VM
+  ansible.builtin.command: >
+    /tmp/port-check.py /tmp/port-check-input.json worker
+  register: worker_tcp_out   #for internal
+  changed_when: false
+  become: true
+  delegate_to: "{{ groups['nkp_worker'][0] }}"
+
+#for UDP ports, check if the message reached the control vm
+- name: Run udp log parser to check udp ports from worker to control 
+  ansible.builtin.command: >
+    /tmp/udp_log_parser.py worker({{ workervm_ip }}) controlplane({{ controlvm_ip}}) {{ control_udp }}
+  register: control_udp_out   
+  changed_when: false
+  become: true
+  delegate_to: "{{ groups['nkp_control'][0] }}"
+
+
+- name: print the sample results
+  debug:
+    var: control_tcp_out
+
+- name: print the sample results
+  debug:
+    var: control_udp_out
+
+- name: print the sample results
+  debug:
+    var: worker_tcp_out
+
+- name: print the sample results
+  debug:
+    var: worker_udp_out
+
+- name: Combine all connection outputs into one list
+  set_fact:
+    connections: >-
+      {{
+        (control_tcp_out.stdout | from_json)
+        + (control_udp_out.stdout | from_json)
+        + (worker_tcp_out.stdout | from_json)
+        + (worker_udp_out.stdout | from_json)
+      }}
+
+- name: Render HTML report using Jinja2 template
+  template:
+    src: templates/nkp_checks_output.htm.j2
+    dest: ./nkp_checks_report.html
+
+#- name: Create HTML report for port check results
+#  ansible.builtin.template:
+#    src: nkp_checks_output.htm.j2
+#    dest: ./nkp_checks_report.html
+#  vars:
+#    port_check_results: "{{ port_check_results }}"
+
+
+#Cleanup the created VMs
+- name: Delete test control VM
+  nutanix.ncp.ntnx_vms:
+    state: absent
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    vm_uuid: '{{ controlvm_out.vm_uuid }}'
+
+
+- name: Delete test worker VM
+  nutanix.ncp.ntnx_vms:
+    state: absent
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    vm_uuid: '{{ workervm_out.vm_uuid}}'
