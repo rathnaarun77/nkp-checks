@@ -58,7 +58,7 @@
 
 - name: Debug
   debug:
-    var: control_vm
+    var: worker_vm
 
 - name: Fail execution if either VM exists
   fail:
