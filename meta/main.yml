@@ -2,6 +2,7 @@ galaxy_info:
   role_name: nkp_checks
   author: Arun Kumar R
   description: Prechecks for NKP Management Cluster on Nutanix
+  min_ansible_version: "2.9" 
   license: BSD
   galaxy_tags:
     - nutanix
@@ -10,3 +11,4 @@ galaxy_info:
     - cluster
 
 dependencies: []
+

@@ -115,7 +115,7 @@
 - name: Refresh inventory
   ansible.builtin.meta: refresh_inventory
 
-#creating a test VM in nkp worker subnet
+# creating a test VM in nkp worker subnet
 - name: Create a VM in worker subnet
   nutanix.ncp.ntnx_vms:
     state: present
@@ -189,7 +189,7 @@
   delegate_to: "{{ groups['nkp_worker'][0] }}"
   become: true
 
-#create listeners on control VM
+# create listeners on control VM
 - name: Creating listeners on control VM
   ansible.builtin.shell: |
     nohup bash -c '
@@ -218,7 +218,7 @@
   become: true
   delegate_to: "{{ groups['nkp_worker'][0] }}"
 
-#copy the python scripts
+# copy the python scripts
 - name: Copy port check and UDP parser scripts to control VM
   ansible.builtin.copy:
     src: "{{ item.src }}"
@@ -253,7 +253,7 @@
   delegate_to: localhost
   run_once: true
 
-#check connectivity from control
+# check connectivity from control
 - name: Run port check script on control VM 
   ansible.builtin.command: >
     /tmp/port-check.py /tmp/port-check-input.json controlplane
@@ -262,7 +262,7 @@
   become: true
   delegate_to: "{{ groups['nkp_control'][0] }}"
 
-#for UDP ports, check if the message reached the worker
+# for UDP ports, check if the message reached the worker
 - name: Run udp log parser to check udp ports from control to worker 
   ansible.builtin.command: >
     /tmp/udp_log_parser.py controlplane({{ controlvm_ip }}) worker({{ workervm_ip}}) {{ worker_udp }}
@@ -271,7 +271,7 @@
   become: true
   delegate_to: "{{ groups['nkp_worker'][0] }}"
 
-#check connectivity from worker
+# check connectivity from worker
 - name: Run port check script on worker VM
   ansible.builtin.command: >
     /tmp/port-check.py /tmp/port-check-input.json worker
@@ -280,10 +280,10 @@
   become: true
   delegate_to: "{{ groups['nkp_worker'][0] }}"
 
-#for UDP ports, check if the message reached the control vm
+# for UDP ports, check if the message reached the control vm
 - name: Run udp log parser to check udp ports from worker to control 
   ansible.builtin.command: >
-    /tmp/udp_log_parser.py worker({{ workervm_ip }}) controlplane({{ controlvm_ip}}) {{ control_udp }}
+    /tmp/udp_log_parser.py worker({{ workervm_ip }}) controlplane({{ controlvm_ip }}) {{ control_udp }}
   register: control_udp_out   
   changed_when: false
   become: true
@@ -306,7 +306,7 @@
     dest: ./nkp_checks_report.html
 
 
-#Cleanup the created VMs
+# Cleanup the created VMs
 - name: Delete test control VM
   nutanix.ncp.ntnx_vms:
     state: absent
@@ -324,4 +324,4 @@
     nutanix_username: "{{ NUTANIX_USER }}"
     nutanix_password: "{{ NUTANIX_PASSWORD }}"
     validate_certs: false
-    vm_uuid: '{{ workervm_out.vm_uuid}}'
+    vm_uuid: '{{ workervm_out.vm_uuid }}'
