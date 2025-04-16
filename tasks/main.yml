@@ -60,8 +60,8 @@
   fail:
     msg: "One or both of the VMs (nkp_control_test or nkp_worker_test) already exist. Please delete the VMs and retry."
   when: >
-    (control_vm.response.metadata is defined and control_vm.response.metadata | length > 0) or
-    (worker_vm.response.metadata is defined and worker_vm.response.metadata | length > 0)
+    (control_vm.response.metadata | length > 0) or
+    (worker_vm.response.metadata | length > 0)
 
 # create a test vm in controlplane subnet 
 - name: Create a VM in controlplane subnet
