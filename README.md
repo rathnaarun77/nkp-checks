@@ -43,6 +43,7 @@ Since we are deploying in a Nutanix environment, install the `nutanix.ncp` ansib
         CONTROL_SUBNET:                                  # controlplane subnet name
         WORKER_SUBNET:                                   # worker subnet name
         NUTANIX_STORAGE_CONTAINER_NAME:                  # Change to your preferred Prism storage container
+        DS_IP:                                           # Data services IP of the prism element cluster
 ```
 
     > ⚠️ **Note:** All the variables are mandatory.
