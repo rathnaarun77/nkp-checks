@@ -1,7 +1,7 @@
 ---
 # tasks file for nkp-checks
 
-- name: Check if NKP rock image is present
+- name: Check if NKP rocky image is present
   nutanix.ncp.ntnx_images_info:
     nutanix_host: "{{ NUTANIX_ENDPOINT }}"
     nutanix_username: "{{ NUTANIX_USER }}"
@@ -17,8 +17,8 @@
 
 - name: Render JSON template
   template:
-    src: nkp-checks/templates/cloud_init.yml.j2
-    dest: ./cloud_init.yml
+    src: templates/cloud_init.yml.j2
+    dest: ./cloud_init_nkp_checks.yml
 
 - name: Upload NKP image to PC if not present
   nutanix.ncp.ntnx_images:
@@ -94,7 +94,7 @@
     memory_gb: 8
     guest_customization:
       type: "cloud_init"
-      script_path: "./cloud_init.yml"
+      script_path: "./cloud_init_nkp_checks.yml"
       is_overridable: true
   register: controlvm_out
 
@@ -142,7 +142,7 @@
     memory_gb: 8
     guest_customization:
       type: "cloud_init"
-      script_path: "./cloud_init.yml"
+      script_path: "./cloud_init_nkp_checks.yml"
       is_overridable: true
   register: workervm_out
 
@@ -166,7 +166,7 @@
 
 - name: Render JSON template
   template:
-    src: nkp-checks/templates/port-check-input.json.j2
+    src: templates/port-check-input.json.j2
     dest: ./port-check-input.json
 
 - name: Wait for test VMs to be ready
