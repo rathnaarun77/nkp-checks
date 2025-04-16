@@ -11,9 +11,6 @@
       name: "{{ IMAGE_NAME }}"
   register: image_result
 
-- name: Debug image check output
-  debug:
-    var: image_result
 
 - name: Render JSON template
   template:
@@ -58,6 +55,10 @@
       vm_name: "nkp_worker_test"
     kind: vm
   register: worker_vm
+
+- name: Debug
+  debug:
+    var: control_vm
 
 - name: Fail execution if either VM exists
   fail:
