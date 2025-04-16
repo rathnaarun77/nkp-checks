@@ -249,7 +249,7 @@
     state: absent
   loop:
     - ./port-check-input.json
-    - ./cloud_init.yml
+    - ./cloud_init_nkp_checks.yml
   delegate_to: localhost
   run_once: true
 

@@ -8,12 +8,12 @@ worker:{{ workervm_ip }}:tcp:443
 prism_central:{{ NUTANIX_ENDPOINT }}:tcp:9440
 
 worker:
-control:{{ controlvm_ip }}:tcp:10250
-control:{{ controlvm_ip }}:tcp:7946
-control:{{ controlvm_ip }}:tcp:4240
-control:{{ controlvm_ip }}:udp:7946
-control:{{ controlvm_ip }}:udp:8472
-control:{{ controlvm_ip }}:tcp:443
+controlplane:{{ controlvm_ip }}:tcp:10250
+controlplane:{{ controlvm_ip }}:tcp:7946
+controlplane:{{ controlvm_ip }}:tcp:4240
+controlplane:{{ controlvm_ip }}:udp:7946
+controlplane:{{ controlvm_ip }}:udp:8472
+controlplane:{{ controlvm_ip }}:tcp:443
 prism_central:{{ NUTANIX_ENDPOINT }}:tcp:9440
-dataservice(foriSCSI):{{ dsip }}:tcp:3260
-dataservice(foriSCSI):{{ dsip }}:tcp:3205
+dataservice(foriSCSI):{{ DS_IP }}:tcp:3260
+dataservice(foriSCSI):{{ DS_IP }}:tcp:3205
