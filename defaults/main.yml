@@ -6,3 +6,5 @@
 #pc_port: "tcp:9440"
 worker_udp: "7946"
 control_udp: "8472,7946"
+airgapped: 'false'
+registry: 'docker.io'

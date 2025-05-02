@@ -1,20 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>NKP Port Checks Report</title>
+    <title>NKP Checks Report</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
+        h1 { color: #2e6c80; }
         h2 { color: #2F4F4F; }
-        table { border-collapse: collapse; width: 100%; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
         th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
         tr:nth-child(even) { background-color: #f9f9f9; }
+        .section-title { background-color: #d9edf7; padding: 10px; margin-top: 20px; font-weight: bold; }
         .state-open { color: green; font-weight: bold; }
         .state-closed { color: red; font-weight: bold; }
     </style>
 </head>
 <body>
+    <h1>NKP Checks Report</h1>
+    <h2>Cluster Summary - {{ pc_result.response[0].name }}</h1>
+
+    <div class="section-title">Cluster Details</div>
+    <table>
+        <tr><th>Cluster Name</th><td>{{ pc_result.response[0].name }}</td></tr>
+        <tr><th>Software Versions</th>
+            <td>
+                {% for software in pc_result.response[0].config.cluster_software_map %}
+                    {{ software.software_type }}: {{ software.version }}<br/>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr><th>Hypervisors</th><td>{{ pc_result.response[0].config.hypervisor_types | join(', ') }}</td></tr>
+        <tr><th>Redundancy Factor</th><td>{{ pc_result.response[0].config.redundancy_factor }}</td></tr>
+        <tr><th>Number of Nodes</th><td>{{ pc_result.response[0].nodes.number_of_nodes }}</td></tr>
+    </table>
+
+    <div class="section-title">Controlplane Subnet - {{ result_net1.response[0].name }}</div>
+    <table>
+        <tr><th>Subnet Name</th><td>{{ result_net1.response[0].name }}</td></tr>
+        <tr><th>Default Gateway</th><td>{{ result_net1.response[0].ip_config[0].ipv4.default_gateway_ip.value }}</td></tr>
+        <tr><th>DHCP Server</th><td>{{ result_net1.response[0].ip_config[0].ipv4.dhcp_server_address.value }}</td></tr>
+        <tr><th>Subnet</th><td>{{ result_net1.response[0].ip_config[0].ipv4.ip_subnet.ip.value }}/{{ result_net1.response[0].ip_config[0].ipv4.ip_subnet.prefix_length }}</td></tr>
+        <tr><th>DHCP Pools</th>
+            <td>
+                {% for pool in result_net1.response[0].ip_config[0].ipv4.pool_list %}
+                    {{ pool.start_ip.value }} - {{ pool.end_ip.value }}<br/>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr><th>DNS Servers</th>
+            <td>
+                {% for dns in result_net1.response[0].dhcp_options.domain_name_servers %}
+                    {{ dns.ipv4.value }}<br/>
+                {% endfor %}
+            </td>
+        </tr>
+    </table>
+
+    {% if result_net2 is defined %}
+        <div class="section-title">Worker Subnet - {{ result_net2.response[0].name }}</div>
+        <table>
+            <tr><th>Subnet Name</th><td>{{ result_net2.response[0].name }}</td></tr>
+            <tr><th>Default Gateway</th><td>{{ result_net2.response[0].ip_config[0].ipv4.default_gateway_ip.value }}</td></tr>
+            <tr><th>DHCP Server</th><td>{{ result_net2.response[0].ip_config[0].ipv4.dhcp_server_address.value }}</td></tr>
+            <tr><th>Subnet</th><td>{{ result_net2.response[0].ip_config[0].ipv4.ip_subnet.ip.value }}/{{ result_net2.response[0].ip_config[0].ipv4.ip_subnet.prefix_length }}</td></tr>
+            <tr><th>DHCP Pools</th>
+                <td>
+                    {% for pool in result_net2.response[0].ip_config[0].ipv4.pool_list %}
+                        {{ pool.start_ip.value }} - {{ pool.end_ip.value }}<br/>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr><th>DNS Servers</th>
+                <td>
+                    {% for dns in result_net2.response[0].dhcp_options.domain_name_servers %}
+                        {{ dns.ipv4.value }}<br/>
+                    {% endfor %}
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+
     <h2>NKP Port Check Report</h2>
     <table>
         <tr>
@@ -34,5 +100,6 @@
         </tr>
         {% endfor %}
     </table>
+
 </body>
 </html>

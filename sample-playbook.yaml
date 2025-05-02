@@ -17,3 +17,5 @@
     WORKER_SUBNET:                                   # worker subnet name
     NUTANIX_STORAGE_CONTAINER_NAME:                  # Change to your preferred Prism storage container
     DS_IP:                                           # Dataservices IP of the prism element cluster
+    airgapped: "false"                               # Change to true if airgapped environment
+    #registry:                                        # Private Image registry if airgapped

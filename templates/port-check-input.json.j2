@@ -6,6 +6,7 @@ worker:{{ workervm_ip }}:udp:7946
 etcd:{{ controlvm_ip }}:tcp:2380
 worker:{{ workervm_ip }}:tcp:443
 prism_central:{{ NUTANIX_ENDPOINT }}:tcp:9440
+image_registry:{{ registry }}:tcp:443
 
 worker:
 controlplane:{{ controlvm_ip }}:tcp:10250
@@ -17,3 +18,4 @@ controlplane:{{ controlvm_ip }}:tcp:443
 prism_central:{{ NUTANIX_ENDPOINT }}:tcp:9440
 dataservice(foriSCSI):{{ DS_IP }}:tcp:3260
 dataservice(foriSCSI):{{ DS_IP }}:tcp:3205
+image_registry:{{ registry }}:tcp:443

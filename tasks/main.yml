@@ -1,6 +1,41 @@
 ---
-# tasks file for nkp-checks
+- name: Ensure required Python packages are installed
+  pip:
+    name:
+      - ntnx-clustermgmt-py-client
+      - ntnx-networking-py-client
+    state: present
 
+- name: Check details of controlplane subnet
+  nutanix.ncp.ntnx_subnets_info_v2:
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    filter: "name eq '{{ CONTROL_SUBNET }}'"
+  register: result_net1
+
+- name: Check details of worker subnet
+  nutanix.ncp.ntnx_subnets_info_v2:
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    filter: "name eq '{{ WORKER_SUBNET }}'"
+  register: result_net2
+  when: WORKER_SUBNET is defined and WORKER_SUBNET != ''
+
+
+- name: fetch all clusters info with filter
+  nutanix.ncp.ntnx_clusters_info_v2:
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    filter: "name eq '{{ NUTANIX_PRISM_ELEMENT_CLUSTER_NAME }}'"
+  register: pc_result
+
+# tasks file for nkp-checks - from here V1
 - name: Check if NKP rocky image is present
   nutanix.ncp.ntnx_images_info:
     nutanix_host: "{{ NUTANIX_ENDPOINT }}"
@@ -11,11 +46,12 @@
       name: "{{ IMAGE_NAME }}"
   register: image_result
 
-
-- name: Render JSON template
-  template:
-    src: templates/cloud_init.yml.j2
-    dest: ./cloud_init_nkp_checks.yml
+- name: Fail if VM image is not present in airgapped environment
+  fail:
+    msg: "VM Image not present, for airgapped, please upload manually and ensure correct naming as per portal."
+  when:
+    - image_result.response.metadata.length == 0
+    - airgapped | bool
 
 - name: Upload NKP image to PC if not present
   nutanix.ncp.ntnx_images:
@@ -31,8 +67,9 @@
     desc: "Image uploaded for NKP deploy by Ansible"
     image_type: "DISK_IMAGE"
     wait: true
-  when: image_result.response.metadata.length == 0
-
+  when: 
+    - image_result.response.metadata.length == 0
+    - not airgapped | bool
 
 - name: Check if test control VM exists
   nutanix.ncp.ntnx_vms_info:
@@ -62,6 +99,11 @@
   when: >
     (control_vm.response.metadata.total_matches > 0) or
     (worker_vm.response.metadata.total_matches > 0)
+
+- name: Render JSON template
+  template:
+    src: templates/cloud_init.yml.j2
+    dest: ./cloud_init_nkp_checks.yml
 
 # create a test vm in controlplane subnet 
 - name: Create a VM in controlplane subnet
@@ -177,6 +219,7 @@
     state: present
   delegate_to: "{{ groups['nkp_control'][0] }}"
   become: true
+  when: not airgapped | bool
 
 - name: Install netcat (nmap-ncat) on worker test VM
   yum:
@@ -184,6 +227,46 @@
     state: present
   delegate_to: "{{ groups['nkp_worker'][0] }}"
   become: true
+  when: not airgapped | bool
+
+#for airgappped environment, copy the ncat packages from local
+
+- name: Copy nmap-ncat RPM to control VM (airgapped)
+  copy:
+    src: files/nmap-ncat.rpm
+    dest: /tmp/nmap-ncat.rpm
+  delegate_to: "{{ groups['nkp_control'][0] }}"
+  become: true
+  when: airgapped | bool
+
+- name: Copy nmap-ncat RPM to worker nodes (airgapped)
+  copy:
+    src: files/nmap-ncat.rpm
+    dest: /tmp/nmap-ncat.rpm
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['nkp_worker'] }}"
+  become: true
+  when: airgapped | bool
+
+- name: Install netcat on control VM from RPM (airgapped)
+  ansible.legacy.dnf:
+    name: /tmp/nmap-ncat.rpm
+    state: present
+    disable_gpg_check: true
+  delegate_to: "{{ groups['nkp_control'][0] }}"
+  become: true
+  when: airgapped | bool
+
+
+- name: Install netcat on control VM from RPM (airgapped)
+  ansible.legacy.dnf:
+    name: /tmp/nmap-ncat.rpm
+    state: present
+    disable_gpg_check: true
+  delegate_to: "{{ groups['nkp_worker'][0] }}"
+  become: true
+  when: airgapped | bool
+
 
 # create listeners on control VM
 - name: Creating listeners on control VM
@@ -252,7 +335,7 @@
 # check connectivity from control
 - name: Run port check script on control VM 
   ansible.builtin.command: >
-    /tmp/port-check.py /tmp/port-check-input.json controlplane
+    /tmp/port-check.py /tmp/port-check-input.json controlplane --airgapped={{ airgapped }}
   register: control_tcp_out   #for internal
   changed_when: false
   become: true
@@ -270,7 +353,7 @@
 # check connectivity from worker
 - name: Run port check script on worker VM
   ansible.builtin.command: >
-    /tmp/port-check.py /tmp/port-check-input.json worker
+    /tmp/port-check.py /tmp/port-check-input.json worker --airgapped={{ airgapped }}
   register: worker_tcp_out   #for internal
   changed_when: false
   become: true

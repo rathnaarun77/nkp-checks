@@ -163,25 +163,12 @@ def check_dns_and_ntp(results, source_role):
         })
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3:
-        print("Usage: port_check.py <input_file> <source_role> [--airgapped=true|false]")
+    if len(sys.argv) != 3:
+        print("Usage: port_check.py <input_file> <source_role>")
         sys.exit(1)
 
     input_file = sys.argv[1]
     source_role = sys.argv[2]
-
-    # Default to False unless specified
-    airgapped = False
-    for arg in sys.argv[3:]:
-        if arg.startswith('--airgapped='):
-            value = arg.split('=', 1)[1].lower()
-            if value in ('true', 'yes', '1'):
-                airgapped = True
-            elif value in ('false', 'no', '0'):
-                airgapped = False
-            else:
-                print("Invalid value for --airgapped. Use true or false.")
-                sys.exit(1)
 
     checks = parse_input_file(input_file, source_role)
     results = []
@@ -209,6 +196,7 @@ if __name__ == '__main__':
             })
         elif proto == 'udp':
             check_udp(destination, port)
+
         else:
             results.append({
                 'source': source_label,
@@ -218,11 +206,11 @@ if __name__ == '__main__':
                 'state': 'invalid-protocol'
             })
 
-    # Registry checks only if not airgapped
-    if not airgapped:
-        source_ip = get_local_ip("docker.io")
-        check_common_registries(results, source_role, source_ip)
+    # Add common registry checks
+    source_ip = get_local_ip("docker.io")
+    check_common_registries(results, source_role, source_ip)
 
+    # Add DNS and NTP checks
     check_dns_and_ntp(results, source_role)
 
     print(json.dumps(results, indent=2))
