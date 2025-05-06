@@ -57,7 +57,7 @@ Since we are deploying in a Nutanix environment, install the `nutanix.ncp` ansib
 
 3. Finally, to trigger the playbook, run the following command:
     ```sh
-    ansible-playbook -i inventory.ini playbook.yml
+    ansible-playbook playbook.yml
     ```
 
 4. Once the playbook completes without any errors, you will get the final nkp_checks_report.html in the same directory.
