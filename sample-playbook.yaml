@@ -24,3 +24,4 @@
     #management_cluster: "true"                      # set to true if testing for management cluster
     #workload_cluster_subnets: ""                    # If management_cluster is set to true, then specify the list of workload cluster subnets (cluster1:subnet1,cluster2:subnet2)
     ansible_connection: local
+    #ansible_python_interpreter: /root/.local/pipx/venvs/ansible-core/bin/python    # facultative, python_interpreter path if you're using different python interpreter and/or from venv.
