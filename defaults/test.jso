@@ -1,0 +1,588 @@
+                                    "disk_size_mib": 20480,
+                                    "storage_config": {
+                                        "storage_container_reference": {
+                                            "kind": "storage_container",
+                                            "name": "SelfServiceContainer",
+                                            "uuid": "0639a1ef-5883-4acd-9387-997e6a700172"
+                                        }
+                                    },
+                                    "uuid": "f136c04f-b52b-4737-a592-85309bec5d60"
+                                },
+                                {
+                                    "device_properties": {
+                                        "device_type": "CDROM",
+                                        "disk_address": {
+                                            "adapter_type": "IDE",
+                                            "device_index": 0
+                                        }
+                                    },
+                                    "disk_size_bytes": 382976,
+                                    "disk_size_mib": 1,
+                                    "storage_config": {
+                                        "storage_container_reference": {
+                                            "kind": "storage_container",
+                                            "name": "SelfServiceContainer",
+                                            "uuid": "0639a1ef-5883-4acd-9387-997e6a700172"
+                                        }
+                                    },
+                                    "uuid": "ebda2d7f-aa36-4d01-a6f9-4d3a8592560a"
+                                }
+                            ],
+                            "enable_cpu_passthrough": false,
+                            "gpu_console_enabled": false,
+                            "gpu_list": [],
+                            "guest_customization": {
+                                "cloud_init": {
+                                    "user_data": "I2Nsb3VkLWNvbmZpZwpzc2hfcHdhdXRoOiBmYWxzZQp1c2VyczoKICAtIG5hbWU6IG51dGFuaXgKICAgIHN1ZG86IEFMTD0oQUxMKSBOT1BBU1NXRDpBTEwKICAgIHNzaF9hdXRob3JpemVkX2tleXM6CiAgICAgIC0gInNzaC1yc2EgQUFBQUIzTnphQzF5YzJFQUFBQURBUUFCQUFBQmdRREljNFREMmh6YnZwTzFXaFE2VzM2ZVArM0l4bnpxOVVPNzY0ZG03SCs3c2tCWEdTWXVVU2dzWnd6VlE0MC9JSUkveUdzdU4rL1haMFpEZ2FjYXhCVFRoS01xcHFtNW5sSmpyUjVyL09FQUUxYklhTUo2Qkd2WmFXdStFWWlmbkN5VGNhdXVBRlhpSG40S0ZIemtwTFBHcnkyN25iSEovaGZmUzh6ZjZQK3VWWlp3WHNhdFRmVXloNnV2RFhWSVkxQW42VkVIUzE2S3hpVmNHZTVsUmsydFh2M0hubjFTNzV6c21jM3ZkTlRJU3FOOGtaUksvRUYzYk1TbStjZHBTb3J0MUptUjBLY2E4MVQ2OU1DSk1ZWTJDK1JHNjdNbEpUcnNKZ05EQmtBMk40c0I5a3FuZVpHdWhvSDVQMmdxYXV2bStzalRJb1lOQkhMVDloUlJhOFdZbHhoT0NwRk81ZnoyOXdtaU9RR2dvNlVSYUUxeGlnM1VpQld3YUYzaGxOcHE2bFlsTVlrQWtSZm9nZ3JkMjY3UTlRbW1pYTYrZnFORThyZyt3bklOdWdVU0N0UWFvK0Jzcis3N0Z5bkJmekVNa3NrSjRYL1Y3clpXYUJWbGd2b3hBeHJrRkhtblkyQ0lCN1Jycll6VURydkpNWFFSNDg0Tm9DQ0dkUE8rOWY4PSIKYm9vdGNtZDoKLSBta2RpciAtcCAvZXRjL2RvY2tlcgp3cml0ZV9maWxlczoKLSBjb250ZW50OiB8CiAgICB7CiAgICAgICAgImluc2VjdXJlLXJlZ2lzdHJpZXMiOiBbInJlZ2lzdHJ5Lm51dGFuaXhkZW1vLmNvbSJdCiAgICB9CiAgcGF0aDogL2V0Yy9kb2NrZXIvZGFlbW9uLmpzb24KcnVuY21kOgotICdbICEgLWYgIi9ldGMveXVtLnJlcG9zLmQvbnV0YW5peF9yb2NreTkucmVwbyIgXSB8fCBtdiAtZiAvZXRjL3l1bS5yZXBvcy5kL251dGFuaXhfcm9ja3k5LnJlcG8gL2V0Yy95dW0ucmVwb3MuZC9udXRhbml4X3JvY2t5OS5yZXBvLmRpc2FibGVkJwotIGRuZiBjb25maWctbWFuYWdlciAtLWFkZC1yZXBvIGh0dHBzOi8vZG93bmxvYWQuZG9ja2VyLmNvbS9saW51eC9yaGVsL2RvY2tlci1jZS5yZXBvCi0gZG5mIC15IGluc3RhbGwgZG9ja2VyLWNlIGRvY2tlci1jZS1jbGkgY29udGFpbmVyZC5pbwotIHN5c3RlbWN0bCAtLW5vdyBlbmFibGUgZG9ja2VyCi0gdXNlcm1vZCAtYUcgZG9ja2VyIG51dGFuaXgKLSAnY3VybCAtTG8gL3Vzci9sb2NhbC9iaW4va3ViZWN0bCBodHRwczovL3N0b3JhZ2UuZ29vZ2xlYXBpcy5jb20va3ViZXJuZXRlcy1yZWxlYXNlL3JlbGVhc2UvJChjdXJsIC1zIGh0dHBzOi8vc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9rdWJlcm5ldGVzLXJlbGVhc2UvcmVsZWFzZS9zdGFibGUudHh0KS9iaW4vbGludXgvYW1kNjQva3ViZWN0bCcKLSBjaG1vZCAreCAvdXNyL2xvY2FsL2Jpbi9rdWJlY3RsCi0gJ2N1cmwgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2hlbG0vaGVsbS9tYWluL3NjcmlwdHMvZ2V0LWhlbG0tMyB8IGJhc2gnCi0gZWplY3QKLSAnd2FsbCAiSWYgeW91IGFyZSBzZWVpbmcgdGhpcyBtZXNzYWdlLCBwbGVhc2UgcmVjb25uZWN0IHlvdXIgU1NIIHNlc3Npb24uIE90aGVyd2lzZSwgdGhlIE5LUCBDTEkgaW5zdGFsbGF0aW9uIHByb2Nlc3MgbWF5IGZhaWwuIicKZmluYWxfbWVzc2FnZTogIlRoZSBtYWNoaW5lIGlzIHJlYWR5IGFmdGVyICRVUFRJTUUgc2Vjb25kcy4gR28gYWhlYWQgYW5kIGluc3RhbGwgdGhlIE5LUCBDTEkgdXNpbmc6ICQgY3VybCAtc0wgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL251dGFuaXhkZXYvbmtwLXF1aWNrc3RhcnQvbWFpbi9zY3JpcHRzL2dldC1ua3AtY2xpIHwgYmFzaCI="
+                                },
+                                "is_overridable": true
+                            },
+                            "hardware_clock_timezone": "UTC",
+                            "hardware_virtualization_enabled": false,
+                            "is_agent_vm": false,
+                            "is_vcpu_hard_pinned": false,
+                            "machine_type": "PC",
+                            "memory_overcommit_enabled": false,
+                            "memory_size_mib": 8192,
+                            "nic_list": [
+                                {
+                                    "ip_endpoint_list": [
+                                        {
+                                            "ip": "10.38.86.250",
+                                            "type": "ASSIGNED"
+                                        }
+                                    ],
+                                    "is_connected": true,
+                                    "mac_address": "50:6b:8d:9d:b8:65",
+                                    "nic_type": "NORMAL_NIC",
+                                    "num_queues": 1,
+                                    "subnet_reference": {
+                                        "kind": "subnet",
+                                        "name": "secondary-PHX-POC314",
+                                        "uuid": "a496f8e7-e4d8-4bbc-ac06-1a88174dc7a8"
+                                    },
+                                    "trunked_vlan_list": [],
+                                    "uuid": "7a3a021b-4c50-451e-a966-5a5e9bee6cc5",
+                                    "vlan_mode": "ACCESS"
+                                }
+                            ],
+                            "num_sockets": 4,
+                            "num_threads_per_core": 1,
+                            "num_vcpus_per_socket": 1,
+                            "power_state": "ON",
+                            "power_state_mechanism": {
+                                "guest_transition_config": {
+                                    "enable_script_exec": false,
+                                    "should_fail_on_script_failure": false
+                                },
+                                "mechanism": "HARD"
+                            },
+                            "scsi_controller_enabled": true,
+                            "serial_port_list": [],
+                            "vga_console_enabled": true,
+                            "vnuma_config": {
+                                "num_vnuma_nodes": 0
+                            },
+                            "vtpm_config": {
+                                "vtpm_enabled": false
+                            }
+                        }
+                    },
+                    "status": {
+                        "cluster_reference": {
+                            "kind": "cluster",
+                            "name": "PHX-POC314",
+                            "uuid": "00063342-86da-3b24-0000-00000000e38d"
+                        },
+                        "execution_context": {
+                            "task_uuid": [
+                                "e6b82e49-3d64-48ad-855b-5d0b459c13a2"
+                            ]
+                        },
+                        "name": "PHX-POC314-secondary-PHX-POC314-nkp-test",
+                        "resources": {
+                            "apc_config": {
+                                "enabled": false
+                            },
+                            "bios_uuid": "6cb8a620-4aa4-4e43-82e2-7cf27bb65253",
+                            "boot_config": {
+                                "boot_device_order_list": [
+                                    "CDROM",
+                                    "DISK",
+                                    "NETWORK"
+                                ],
+                                "boot_type": "LEGACY"
+                            },
+                            "cpu_hotplug_enabled": true,
+                            "disable_branding": false,
+                            "disk_list": [
+                                {
+                                    "data_source_reference": {
+                                        "kind": "image",
+                                        "uuid": "970f64ad-57bc-4ff7-82ff-60287e4164f9"
+                                    },
+                                    "device_properties": {
+                                        "device_type": "DISK",
+                                        "disk_address": {
+                                            "adapter_type": "SCSI",
+                                            "device_index": 0
+                                        }
+                                    },
+                                    "disk_size_bytes": 21474836480,
+                                    "disk_size_mib": 20480,
+                                    "is_migration_in_progress": false,
+                                    "storage_config": {
+                                        "storage_container_reference": {
+                                            "kind": "storage_container",
+                                            "name": "SelfServiceContainer",
+                                            "uuid": "0639a1ef-5883-4acd-9387-997e6a700172"
+                                        }
+                                    },
+                                    "uuid": "f136c04f-b52b-4737-a592-85309bec5d60"
+                                },
+                                {
+                                    "device_properties": {
+                                        "device_type": "CDROM",
+                                        "disk_address": {
+                                            "adapter_type": "IDE",
+                                            "device_index": 0
+                                        }
+                                    },
+                                    "disk_size_bytes": 382976,
+                                    "disk_size_mib": 1,
+                                    "is_migration_in_progress": false,
+                                    "storage_config": {
+                                        "storage_container_reference": {
+                                            "kind": "storage_container",
+                                            "name": "SelfServiceContainer",
+                                            "uuid": "0639a1ef-5883-4acd-9387-997e6a700172"
+                                        }
+                                    },
+                                    "uuid": "ebda2d7f-aa36-4d01-a6f9-4d3a8592560a"
+                                }
+                            ],
+                            "enable_cpu_passthrough": false,
+                            "generation_uuid": "a8728eae-8f64-4b14-8f08-57ef81df9885",
+                            "gpu_console_enabled": false,
+                            "gpu_list": [],
+                            "guest_customization": {
+                                "cloud_init": {
+                                    "user_data": "I2Nsb3VkLWNvbmZpZwpzc2hfcHdhdXRoOiBmYWxzZQp1c2VyczoKICAtIG5hbWU6IG51dGFuaXgKICAgIHN1ZG86IEFMTD0oQUxMKSBOT1BBU1NXRDpBTEwKICAgIHNzaF9hdXRob3JpemVkX2tleXM6CiAgICAgIC0gInNzaC1yc2EgQUFBQUIzTnphQzF5YzJFQUFBQURBUUFCQUFBQmdRREljNFREMmh6YnZwTzFXaFE2VzM2ZVArM0l4bnpxOVVPNzY0ZG03SCs3c2tCWEdTWXVVU2dzWnd6VlE0MC9JSUkveUdzdU4rL1haMFpEZ2FjYXhCVFRoS01xcHFtNW5sSmpyUjVyL09FQUUxYklhTUo2Qkd2WmFXdStFWWlmbkN5VGNhdXVBRlhpSG40S0ZIemtwTFBHcnkyN25iSEovaGZmUzh6ZjZQK3VWWlp3WHNhdFRmVXloNnV2RFhWSVkxQW42VkVIUzE2S3hpVmNHZTVsUmsydFh2M0hubjFTNzV6c21jM3ZkTlRJU3FOOGtaUksvRUYzYk1TbStjZHBTb3J0MUptUjBLY2E4MVQ2OU1DSk1ZWTJDK1JHNjdNbEpUcnNKZ05EQmtBMk40c0I5a3FuZVpHdWhvSDVQMmdxYXV2bStzalRJb1lOQkhMVDloUlJhOFdZbHhoT0NwRk81ZnoyOXdtaU9RR2dvNlVSYUUxeGlnM1VpQld3YUYzaGxOcHE2bFlsTVlrQWtSZm9nZ3JkMjY3UTlRbW1pYTYrZnFORThyZyt3bklOdWdVU0N0UWFvK0Jzcis3N0Z5bkJmekVNa3NrSjRYL1Y3clpXYUJWbGd2b3hBeHJrRkhtblkyQ0lCN1Jycll6VURydkpNWFFSNDg0Tm9DQ0dkUE8rOWY4PSIKYm9vdGNtZDoKLSBta2RpciAtcCAvZXRjL2RvY2tlcgp3cml0ZV9maWxlczoKLSBjb250ZW50OiB8CiAgICB7CiAgICAgICAgImluc2VjdXJlLXJlZ2lzdHJpZXMiOiBbInJlZ2lzdHJ5Lm51dGFuaXhkZW1vLmNvbSJdCiAgICB9CiAgcGF0aDogL2V0Yy9kb2NrZXIvZGFlbW9uLmpzb24KcnVuY21kOgotICdbICEgLWYgIi9ldGMveXVtLnJlcG9zLmQvbnV0YW5peF9yb2NreTkucmVwbyIgXSB8fCBtdiAtZiAvZXRjL3l1bS5yZXBvcy5kL251dGFuaXhfcm9ja3k5LnJlcG8gL2V0Yy95dW0ucmVwb3MuZC9udXRhbml4X3JvY2t5OS5yZXBvLmRpc2FibGVkJwotIGRuZiBjb25maWctbWFuYWdlciAtLWFkZC1yZXBvIGh0dHBzOi8vZG93bmxvYWQuZG9ja2VyLmNvbS9saW51eC9yaGVsL2RvY2tlci1jZS5yZXBvCi0gZG5mIC15IGluc3RhbGwgZG9ja2VyLWNlIGRvY2tlci1jZS1jbGkgY29udGFpbmVyZC5pbwotIHN5c3RlbWN0bCAtLW5vdyBlbmFibGUgZG9ja2VyCi0gdXNlcm1vZCAtYUcgZG9ja2VyIG51dGFuaXgKLSAnY3VybCAtTG8gL3Vzci9sb2NhbC9iaW4va3ViZWN0bCBodHRwczovL3N0b3JhZ2UuZ29vZ2xlYXBpcy5jb20va3ViZXJuZXRlcy1yZWxlYXNlL3JlbGVhc2UvJChjdXJsIC1zIGh0dHBzOi8vc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9rdWJlcm5ldGVzLXJlbGVhc2UvcmVsZWFzZS9zdGFibGUudHh0KS9iaW4vbGludXgvYW1kNjQva3ViZWN0bCcKLSBjaG1vZCAreCAvdXNyL2xvY2FsL2Jpbi9rdWJlY3RsCi0gJ2N1cmwgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2hlbG0vaGVsbS9tYWluL3NjcmlwdHMvZ2V0LWhlbG0tMyB8IGJhc2gnCi0gZWplY3QKLSAnd2FsbCAiSWYgeW91IGFyZSBzZWVpbmcgdGhpcyBtZXNzYWdlLCBwbGVhc2UgcmVjb25uZWN0IHlvdXIgU1NIIHNlc3Npb24uIE90aGVyd2lzZSwgdGhlIE5LUCBDTEkgaW5zdGFsbGF0aW9uIHByb2Nlc3MgbWF5IGZhaWwuIicKZmluYWxfbWVzc2FnZTogIlRoZSBtYWNoaW5lIGlzIHJlYWR5IGFmdGVyICRVUFRJTUUgc2Vjb25kcy4gR28gYWhlYWQgYW5kIGluc3RhbGwgdGhlIE5LUCBDTEkgdXNpbmc6ICQgY3VybCAtc0wgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL251dGFuaXhkZXYvbmtwLXF1aWNrc3RhcnQvbWFpbi9zY3JpcHRzL2dldC1ua3AtY2xpIHwgYmFzaCI="
+                                },
+                                "is_overridable": true
+                            },
+                            "hardware_clock_timezone": "UTC",
+                            "hardware_virtualization_enabled": false,
+                            "host_reference": {
+                                "kind": "host",
+                                "name": "10.38.86.27",
+                                "uuid": "66dec95d-4637-4e38-b65b-4a49330d20cd"
+                            },
+                            "hypervisor_type": "AHV",
+                            "is_agent_vm": false,
+                            "is_vcpu_hard_pinned": false,
+                            "machine_type": "PC",
+                            "memory_overcommit_enabled": false,
+                            "memory_size_mib": 8192,
+                            "nic_list": [
+                                {
+                                    "ip_endpoint_list": [
+                                        {
+                                            "ip": "10.38.86.250",
+                                            "type": "ASSIGNED"
+                                        }
+                                    ],
+                                    "is_connected": true,
+                                    "mac_address": "50:6b:8d:9d:b8:65",
+                                    "nic_type": "NORMAL_NIC",
+                                    "num_queues": 1,
+                                    "subnet_reference": {
+                                        "kind": "subnet",
+                                        "name": "secondary-PHX-POC314",
+                                        "uuid": "a496f8e7-e4d8-4bbc-ac06-1a88174dc7a8"
+                                    },
+                                    "trunked_vlan_list": [],
+                                    "uuid": "7a3a021b-4c50-451e-a966-5a5e9bee6cc5",
+                                    "vlan_mode": "ACCESS"
+                                }
+                            ],
+                            "num_sockets": 4,
+                            "num_threads_per_core": 1,
+                            "num_vcpus_per_socket": 1,
+                            "power_state": "ON",
+                            "power_state_mechanism": {
+                                "guest_transition_config": {
+                                    "enable_script_exec": false,
+                                    "should_fail_on_script_failure": false
+                                },
+                                "mechanism": "HARD"
+                            },
+                            "protection_type": "UNPROTECTED",
+                            "scsi_controller_enabled": true,
+                            "serial_port_list": [],
+                            "vga_console_enabled": true,
+                            "vnuma_config": {
+                                "num_vnuma_nodes": 0
+                            },
+                            "vtpm_config": {
+                                "version": "",
+                                "vtpm_enabled": false
+                            }
+                        },
+                        "state": "COMPLETE"
+                    }
+                },
+                "task_uuid": "e6b82e49-3d64-48ad-855b-5d0b459c13a2",
+                "vm_uuid": "6cb8a620-4aa4-4e43-82e2-7cf27bb65253"
+            },
+            {
+                "ansible_loop_var": "item",
+                "changed": true,
+                "error": null,
+                "failed": false,
+                "invocation": {
+                    "module_args": {
+                        "cluster": {
+                            "name": "PHX-POC314"
+                        },
+                        "cores_per_vcpu": 1,
+                        "disks": [
+                            {
+                                "bus": "SCSI",
+                                "clone_image": {
+                                    "name": "nkp-rocky-9.5-release-1.31.4-20250214003015.qcow2"
+                                },
+                                "size_gb": 20,
+                                "type": "DISK"
+                            }
+                        ],
+                        "force_power_off": false,
+                        "guest_customization": {
+                            "is_overridable": true,
+                            "script_path": "./cloud_init_nkp_checks.yml",
+                            "type": "cloud_init"
+                        },
+                        "memory_gb": 8,
+                        "name": "PHX-POC314-primary-PHX-POC314-nkp-test",
+                        "networks": [
+                            {
+                                "is_connected": true,
+                                "subnet": {
+                                    "name": "primary-PHX-POC314"
+                                }
+                            }
+                        ],
+                        "nutanix_host": "10.38.86.7",
+                        "nutanix_password": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER",
+                        "nutanix_port": "9440",
+                        "nutanix_username": "admin",
+                        "remove_categories": false,
+                        "state": "present",
+                        "timezone": "UTC",
+                        "validate_certs": false,
+                        "vcpus": 4,
+                        "wait": true
+                    }
+                },
+                "item": [
+                    "PHX-POC314",
+                    "primary-PHX-POC314"
+                ],
+                "response": {
+                    "api_version": "3.1",
+                    "metadata": {
+                        "categories": {},
+                        "categories_mapping": {},
+                        "creation_time": "2025-05-04T22:07:30Z",
+                        "entity_version": "2",
+                        "kind": "vm",
+                        "last_update_time": "2025-05-04T22:07:30Z",
+                        "owner_reference": {
+                            "kind": "user",
+                            "name": "admin",
+                            "uuid": "00000000-0000-0000-0000-000000000000"
+                        },
+                        "project_reference": {
+                            "kind": "project",
+                            "name": "_internal",
+                            "uuid": "7e143855-5256-4866-817c-d7562b059f3a"
+                        },
+                        "spec_version": 0,
+                        "uuid": "ac341d5a-f7d9-4c36-b2c7-6e09bb88f115"
+                    },
+                    "spec": {
+                        "cluster_reference": {
+                            "kind": "cluster",
+                            "name": "PHX-POC314",
+                            "uuid": "00063342-86da-3b24-0000-00000000e38d"
+                        },
+                        "name": "PHX-POC314-primary-PHX-POC314-nkp-test",
+                        "resources": {
+                            "apc_config": {
+                                "enabled": false
+                            },
+                            "boot_config": {
+                                "boot_device_order_list": [
+                                    "CDROM",
+                                    "DISK",
+                                    "NETWORK"
+                                ],
+                                "boot_type": "LEGACY"
+                            },
+                            "cpu_hotplug_enabled": true,
+                            "disable_branding": false,
+                            "disk_list": [
+                                {
+                                    "data_source_reference": {
+                                        "kind": "image",
+                                        "uuid": "970f64ad-57bc-4ff7-82ff-60287e4164f9"
+                                    },
+                                    "device_properties": {
+                                        "device_type": "DISK",
+                                        "disk_address": {
+                                            "adapter_type": "SCSI",
+                                            "device_index": 0
+                                        }
+                                    },
+                                    "disk_size_bytes": 21474836480,
+                                    "disk_size_mib": 20480,
+                                    "storage_config": {
+                                        "storage_container_reference": {
+                                            "kind": "storage_container",
+                                            "name": "SelfServiceContainer",
+                                            "uuid": "0639a1ef-5883-4acd-9387-997e6a700172"
+                                        }
+                                    },
+                                    "uuid": "15010048-8e45-4969-98ae-169327a30a25"
+                                },
+                                {
+                                    "device_properties": {
+                                        "device_type": "CDROM",
+                                        "disk_address": {
+                                            "adapter_type": "IDE",
+                                            "device_index": 0
+                                        }
+                                    },
+                                    "disk_size_bytes": 382976,
+                                    "disk_size_mib": 1,
+                                    "storage_config": {
+                                        "storage_container_reference": {
+                                            "kind": "storage_container",
+                                            "name": "SelfServiceContainer",
+                                            "uuid": "0639a1ef-5883-4acd-9387-997e6a700172"
+                                        }
+                                    },
+                                    "uuid": "fdd67dc6-1a84-455e-951f-8bb189a262ad"
+                                }
+                            ],
+                            "enable_cpu_passthrough": false,
+                            "gpu_console_enabled": false,
+                            "gpu_list": [],
+                            "guest_customization": {
+                                "cloud_init": {
+                                    "user_data": "I2Nsb3VkLWNvbmZpZwpzc2hfcHdhdXRoOiBmYWxzZQp1c2VyczoKICAtIG5hbWU6IG51dGFuaXgKICAgIHN1ZG86IEFMTD0oQUxMKSBOT1BBU1NXRDpBTEwKICAgIHNzaF9hdXRob3JpemVkX2tleXM6CiAgICAgIC0gInNzaC1yc2EgQUFBQUIzTnphQzF5YzJFQUFBQURBUUFCQUFBQmdRREljNFREMmh6YnZwTzFXaFE2VzM2ZVArM0l4bnpxOVVPNzY0ZG03SCs3c2tCWEdTWXVVU2dzWnd6VlE0MC9JSUkveUdzdU4rL1haMFpEZ2FjYXhCVFRoS01xcHFtNW5sSmpyUjVyL09FQUUxYklhTUo2Qkd2WmFXdStFWWlmbkN5VGNhdXVBRlhpSG40S0ZIemtwTFBHcnkyN25iSEovaGZmUzh6ZjZQK3VWWlp3WHNhdFRmVXloNnV2RFhWSVkxQW42VkVIUzE2S3hpVmNHZTVsUmsydFh2M0hubjFTNzV6c21jM3ZkTlRJU3FOOGtaUksvRUYzYk1TbStjZHBTb3J0MUptUjBLY2E4MVQ2OU1DSk1ZWTJDK1JHNjdNbEpUcnNKZ05EQmtBMk40c0I5a3FuZVpHdWhvSDVQMmdxYXV2bStzalRJb1lOQkhMVDloUlJhOFdZbHhoT0NwRk81ZnoyOXdtaU9RR2dvNlVSYUUxeGlnM1VpQld3YUYzaGxOcHE2bFlsTVlrQWtSZm9nZ3JkMjY3UTlRbW1pYTYrZnFORThyZyt3bklOdWdVU0N0UWFvK0Jzcis3N0Z5bkJmekVNa3NrSjRYL1Y3clpXYUJWbGd2b3hBeHJrRkhtblkyQ0lCN1Jycll6VURydkpNWFFSNDg0Tm9DQ0dkUE8rOWY4PSIKYm9vdGNtZDoKLSBta2RpciAtcCAvZXRjL2RvY2tlcgp3cml0ZV9maWxlczoKLSBjb250ZW50OiB8CiAgICB7CiAgICAgICAgImluc2VjdXJlLXJlZ2lzdHJpZXMiOiBbInJlZ2lzdHJ5Lm51dGFuaXhkZW1vLmNvbSJdCiAgICB9CiAgcGF0aDogL2V0Yy9kb2NrZXIvZGFlbW9uLmpzb24KcnVuY21kOgotICdbICEgLWYgIi9ldGMveXVtLnJlcG9zLmQvbnV0YW5peF9yb2NreTkucmVwbyIgXSB8fCBtdiAtZiAvZXRjL3l1bS5yZXBvcy5kL251dGFuaXhfcm9ja3k5LnJlcG8gL2V0Yy95dW0ucmVwb3MuZC9udXRhbml4X3JvY2t5OS5yZXBvLmRpc2FibGVkJwotIGRuZiBjb25maWctbWFuYWdlciAtLWFkZC1yZXBvIGh0dHBzOi8vZG93bmxvYWQuZG9ja2VyLmNvbS9saW51eC9yaGVsL2RvY2tlci1jZS5yZXBvCi0gZG5mIC15IGluc3RhbGwgZG9ja2VyLWNlIGRvY2tlci1jZS1jbGkgY29udGFpbmVyZC5pbwotIHN5c3RlbWN0bCAtLW5vdyBlbmFibGUgZG9ja2VyCi0gdXNlcm1vZCAtYUcgZG9ja2VyIG51dGFuaXgKLSAnY3VybCAtTG8gL3Vzci9sb2NhbC9iaW4va3ViZWN0bCBodHRwczovL3N0b3JhZ2UuZ29vZ2xlYXBpcy5jb20va3ViZXJuZXRlcy1yZWxlYXNlL3JlbGVhc2UvJChjdXJsIC1zIGh0dHBzOi8vc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9rdWJlcm5ldGVzLXJlbGVhc2UvcmVsZWFzZS9zdGFibGUudHh0KS9iaW4vbGludXgvYW1kNjQva3ViZWN0bCcKLSBjaG1vZCAreCAvdXNyL2xvY2FsL2Jpbi9rdWJlY3RsCi0gJ2N1cmwgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2hlbG0vaGVsbS9tYWluL3NjcmlwdHMvZ2V0LWhlbG0tMyB8IGJhc2gnCi0gZWplY3QKLSAnd2FsbCAiSWYgeW91IGFyZSBzZWVpbmcgdGhpcyBtZXNzYWdlLCBwbGVhc2UgcmVjb25uZWN0IHlvdXIgU1NIIHNlc3Npb24uIE90aGVyd2lzZSwgdGhlIE5LUCBDTEkgaW5zdGFsbGF0aW9uIHByb2Nlc3MgbWF5IGZhaWwuIicKZmluYWxfbWVzc2FnZTogIlRoZSBtYWNoaW5lIGlzIHJlYWR5IGFmdGVyICRVUFRJTUUgc2Vjb25kcy4gR28gYWhlYWQgYW5kIGluc3RhbGwgdGhlIE5LUCBDTEkgdXNpbmc6ICQgY3VybCAtc0wgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL251dGFuaXhkZXYvbmtwLXF1aWNrc3RhcnQvbWFpbi9zY3JpcHRzL2dldC1ua3AtY2xpIHwgYmFzaCI="
+                                },
+                                "is_overridable": true
+                            },
+                            "hardware_clock_timezone": "UTC",
+                            "hardware_virtualization_enabled": false,
+                            "is_agent_vm": false,
+                            "is_vcpu_hard_pinned": false,
+                            "machine_type": "PC",
+                            "memory_overcommit_enabled": false,
+                            "memory_size_mib": 8192,
+                            "nic_list": [
+                                {
+                                    "ip_endpoint_list": [
+                                        {
+                                            "ip": "10.38.86.92",
+                                            "type": "ASSIGNED"
+                                        }
+                                    ],
+                                    "is_connected": true,
+                                    "mac_address": "50:6b:8d:e4:34:06",
+                                    "nic_type": "NORMAL_NIC",
+                                    "num_queues": 1,
+                                    "subnet_reference": {
+                                        "kind": "subnet",
+                                        "name": "primary-PHX-POC314",
+                                        "uuid": "d7debb53-c0ea-438b-aaa3-eedfe9f6d101"
+                                    },
+                                    "trunked_vlan_list": [],
+                                    "uuid": "a65c2189-f43b-4333-8be3-9336f5d0f709",
+                                    "vlan_mode": "ACCESS"
+                                }
+                            ],
+                            "num_sockets": 4,
+                            "num_threads_per_core": 1,
+                            "num_vcpus_per_socket": 1,
+                            "power_state": "ON",
+                            "power_state_mechanism": {
+                                "guest_transition_config": {
+                                    "enable_script_exec": false,
+                                    "should_fail_on_script_failure": false
+                                },
+                                "mechanism": "HARD"
+                            },
+                            "scsi_controller_enabled": true,
+                            "serial_port_list": [],
+                            "vga_console_enabled": true,
+                            "vnuma_config": {
+                                "num_vnuma_nodes": 0
+                            },
+                            "vtpm_config": {
+                                "vtpm_enabled": false
+                            }
+                        }
+                    },
+                    "status": {
+                        "cluster_reference": {
+                            "kind": "cluster",
+                            "name": "PHX-POC314",
+                            "uuid": "00063342-86da-3b24-0000-00000000e38d"
+                        },
+                        "execution_context": {
+                            "task_uuid": [
+                                "b3e7f280-a7b1-45bf-b467-df47fe565494"
+                            ]
+                        },
+                        "name": "PHX-POC314-primary-PHX-POC314-nkp-test",
+                        "resources": {
+                            "apc_config": {
+                                "enabled": false
+                            },
+                            "bios_uuid": "ac341d5a-f7d9-4c36-b2c7-6e09bb88f115",
+                            "boot_config": {
+                                "boot_device_order_list": [
+                                    "CDROM",
+                                    "DISK",
+                                    "NETWORK"
+                                ],
+                                "boot_type": "LEGACY"
+                            },
+                            "cpu_hotplug_enabled": true,
+                            "disable_branding": false,
+                            "disk_list": [
+                                {
+                                    "data_source_reference": {
+                                        "kind": "image",
+                                        "uuid": "970f64ad-57bc-4ff7-82ff-60287e4164f9"
+                                    },
+                                    "device_properties": {
+                                        "device_type": "DISK",
+                                        "disk_address": {
+                                            "adapter_type": "SCSI",
+                                            "device_index": 0
+                                        }
+                                    },
+                                    "disk_size_bytes": 21474836480,
+                                    "disk_size_mib": 20480,
+                                    "is_migration_in_progress": false,
+                                    "storage_config": {
+                                        "storage_container_reference": {
+                                            "kind": "storage_container",
+                                            "name": "SelfServiceContainer",
+                                            "uuid": "0639a1ef-5883-4acd-9387-997e6a700172"
+                                        }
+                                    },
+                                    "uuid": "15010048-8e45-4969-98ae-169327a30a25"
+                                },
+                                {
+                                    "device_properties": {
+                                        "device_type": "CDROM",
+                                        "disk_address": {
+                                            "adapter_type": "IDE",
+                                            "device_index": 0
+                                        }
+                                    },
+                                    "disk_size_bytes": 382976,
+                                    "disk_size_mib": 1,
+                                    "is_migration_in_progress": false,
+                                    "storage_config": {
+                                        "storage_container_reference": {
+                                            "kind": "storage_container",
+                                            "name": "SelfServiceContainer",
+                                            "uuid": "0639a1ef-5883-4acd-9387-997e6a700172"
+                                        }
+                                    },
+                                    "uuid": "fdd67dc6-1a84-455e-951f-8bb189a262ad"
+                                }
+                            ],
+                            "enable_cpu_passthrough": false,
+                            "generation_uuid": "eed2a98a-f620-41c9-88db-f59580bd2831",
+                            "gpu_console_enabled": false,
+                            "gpu_list": [],
+                            "guest_customization": {
+                                "cloud_init": {
+                                    "user_data": "I2Nsb3VkLWNvbmZpZwpzc2hfcHdhdXRoOiBmYWxzZQp1c2VyczoKICAtIG5hbWU6IG51dGFuaXgKICAgIHN1ZG86IEFMTD0oQUxMKSBOT1BBU1NXRDpBTEwKICAgIHNzaF9hdXRob3JpemVkX2tleXM6CiAgICAgIC0gInNzaC1yc2EgQUFBQUIzTnphQzF5YzJFQUFBQURBUUFCQUFBQmdRREljNFREMmh6YnZwTzFXaFE2VzM2ZVArM0l4bnpxOVVPNzY0ZG03SCs3c2tCWEdTWXVVU2dzWnd6VlE0MC9JSUkveUdzdU4rL1haMFpEZ2FjYXhCVFRoS01xcHFtNW5sSmpyUjVyL09FQUUxYklhTUo2Qkd2WmFXdStFWWlmbkN5VGNhdXVBRlhpSG40S0ZIemtwTFBHcnkyN25iSEovaGZmUzh6ZjZQK3VWWlp3WHNhdFRmVXloNnV2RFhWSVkxQW42VkVIUzE2S3hpVmNHZTVsUmsydFh2M0hubjFTNzV6c21jM3ZkTlRJU3FOOGtaUksvRUYzYk1TbStjZHBTb3J0MUptUjBLY2E4MVQ2OU1DSk1ZWTJDK1JHNjdNbEpUcnNKZ05EQmtBMk40c0I5a3FuZVpHdWhvSDVQMmdxYXV2bStzalRJb1lOQkhMVDloUlJhOFdZbHhoT0NwRk81ZnoyOXdtaU9RR2dvNlVSYUUxeGlnM1VpQld3YUYzaGxOcHE2bFlsTVlrQWtSZm9nZ3JkMjY3UTlRbW1pYTYrZnFORThyZyt3bklOdWdVU0N0UWFvK0Jzcis3N0Z5bkJmekVNa3NrSjRYL1Y3clpXYUJWbGd2b3hBeHJrRkhtblkyQ0lCN1Jycll6VURydkpNWFFSNDg0Tm9DQ0dkUE8rOWY4PSIKYm9vdGNtZDoKLSBta2RpciAtcCAvZXRjL2RvY2tlcgp3cml0ZV9maWxlczoKLSBjb250ZW50OiB8CiAgICB7CiAgICAgICAgImluc2VjdXJlLXJlZ2lzdHJpZXMiOiBbInJlZ2lzdHJ5Lm51dGFuaXhkZW1vLmNvbSJdCiAgICB9CiAgcGF0aDogL2V0Yy9kb2NrZXIvZGFlbW9uLmpzb24KcnVuY21kOgotICdbICEgLWYgIi9ldGMveXVtLnJlcG9zLmQvbnV0YW5peF9yb2NreTkucmVwbyIgXSB8fCBtdiAtZiAvZXRjL3l1bS5yZXBvcy5kL251dGFuaXhfcm9ja3k5LnJlcG8gL2V0Yy95dW0ucmVwb3MuZC9udXRhbml4X3JvY2t5OS5yZXBvLmRpc2FibGVkJwotIGRuZiBjb25maWctbWFuYWdlciAtLWFkZC1yZXBvIGh0dHBzOi8vZG93bmxvYWQuZG9ja2VyLmNvbS9saW51eC9yaGVsL2RvY2tlci1jZS5yZXBvCi0gZG5mIC15IGluc3RhbGwgZG9ja2VyLWNlIGRvY2tlci1jZS1jbGkgY29udGFpbmVyZC5pbwotIHN5c3RlbWN0bCAtLW5vdyBlbmFibGUgZG9ja2VyCi0gdXNlcm1vZCAtYUcgZG9ja2VyIG51dGFuaXgKLSAnY3VybCAtTG8gL3Vzci9sb2NhbC9iaW4va3ViZWN0bCBodHRwczovL3N0b3JhZ2UuZ29vZ2xlYXBpcy5jb20va3ViZXJuZXRlcy1yZWxlYXNlL3JlbGVhc2UvJChjdXJsIC1zIGh0dHBzOi8vc3RvcmFnZS5nb29nbGVhcGlzLmNvbS9rdWJlcm5ldGVzLXJlbGVhc2UvcmVsZWFzZS9zdGFibGUudHh0KS9iaW4vbGludXgvYW1kNjQva3ViZWN0bCcKLSBjaG1vZCAreCAvdXNyL2xvY2FsL2Jpbi9rdWJlY3RsCi0gJ2N1cmwgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2hlbG0vaGVsbS9tYWluL3NjcmlwdHMvZ2V0LWhlbG0tMyB8IGJhc2gnCi0gZWplY3QKLSAnd2FsbCAiSWYgeW91IGFyZSBzZWVpbmcgdGhpcyBtZXNzYWdlLCBwbGVhc2UgcmVjb25uZWN0IHlvdXIgU1NIIHNlc3Npb24uIE90aGVyd2lzZSwgdGhlIE5LUCBDTEkgaW5zdGFsbGF0aW9uIHByb2Nlc3MgbWF5IGZhaWwuIicKZmluYWxfbWVzc2FnZTogIlRoZSBtYWNoaW5lIGlzIHJlYWR5IGFmdGVyICRVUFRJTUUgc2Vjb25kcy4gR28gYWhlYWQgYW5kIGluc3RhbGwgdGhlIE5LUCBDTEkgdXNpbmc6ICQgY3VybCAtc0wgaHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL251dGFuaXhkZXYvbmtwLXF1aWNrc3RhcnQvbWFpbi9zY3JpcHRzL2dldC1ua3AtY2xpIHwgYmFzaCI="
+                                },
+                                "is_overridable": true
+                            },
+                            "hardware_clock_timezone": "UTC",
+                            "hardware_virtualization_enabled": false,
+                            "host_reference": {
+                                "kind": "host",
+                                "name": "10.38.86.27",
+                                "uuid": "66dec95d-4637-4e38-b65b-4a49330d20cd"
+                            },
+                            "hypervisor_type": "AHV",
+                            "is_agent_vm": false,
+                            "is_vcpu_hard_pinned": false,
+                            "machine_type": "PC",
+                            "memory_overcommit_enabled": false,
+                            "memory_size_mib": 8192,
+                            "nic_list": [
+                                {
+                                    "ip_endpoint_list": [
+                                        {
+                                            "ip": "10.38.86.92",
+                                            "type": "ASSIGNED"
+                                        }
+                                    ],
+                                    "is_connected": true,
+                                    "mac_address": "50:6b:8d:e4:34:06",
+                                    "nic_type": "NORMAL_NIC",
+                                    "num_queues": 1,
+                                    "subnet_reference": {
+                                        "kind": "subnet",
+                                        "name": "primary-PHX-POC314",
+                                        "uuid": "d7debb53-c0ea-438b-aaa3-eedfe9f6d101"
+                                    },
+                                    "trunked_vlan_list": [],
+                                    "uuid": "a65c2189-f43b-4333-8be3-9336f5d0f709",
+                                    "vlan_mode": "ACCESS"
+                                }
+                            ],
+                            "num_sockets": 4,
+                            "num_threads_per_core": 1,
+                            "num_vcpus_per_socket": 1,
+                            "power_state": "ON",
+                            "power_state_mechanism": {
+                                "guest_transition_config": {
+                                    "enable_script_exec": false,
+                                    "should_fail_on_script_failure": false
+                                },
+                                "mechanism": "HARD"
+                            },
+                            "protection_type": "UNPROTECTED",
+                            "scsi_controller_enabled": true,
+                            "serial_port_list": [],
+                            "vga_console_enabled": true,
+                            "vnuma_config": {
+                                "num_vnuma_nodes": 0
+                            },
+                            "vtpm_config": {
+                                "version": "",
+                                "vtpm_enabled": false
+                            }
+                        },
+                        "state": "COMPLETE"
+                    }
+                },
+                "task_uuid": "b3e7f280-a7b1-45bf-b467-df47fe565494",
+                "vm_uuid": "ac341d5a-f7d9-4c36-b2c7-6e09bb88f115"
+            }
+        ],
+        "skipped": false
+    }
+}

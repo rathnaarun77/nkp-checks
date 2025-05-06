@@ -8,3 +8,5 @@ worker_udp: "7946"
 control_udp: "8472,7946"
 airgapped: 'false'
 registry: 'docker.io'
+management_cluster: 'false'
+workload_cluster_subnets: []

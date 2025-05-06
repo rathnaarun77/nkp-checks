@@ -1,7 +1,7 @@
 # NKP Pre-deployment - port connectivity check 
 
 ## Overview
-This role is used to verify the port requirements for deploying NKP management cluster on a Nutanix infrastructure.
+This Ansible role is used to verify the port requirements for deploying Nutanix Kubernetes Platform(NKP) cluster on a Nutanix infrastructure.
 
 
 ## Usage
@@ -29,24 +29,35 @@ Since we are deploying in a Nutanix environment, install the `nutanix.ncp` ansib
 - hosts: all
   gather_facts: no
   roles:
-    - rathnaarun77.nkp_checks
+    - nkp-checks
   environment:
-        ANSIBLE_HOST_KEY_CHECKING: "False"
-        image_url:                                       # url to download image from nutanix portal 
-        IMAGE_NAME:                                      # Image name - corresponding to the above url
-        SSH_PUBLIC_KEY:                                  # SSH key of the local machine,used by ansible to connect to the test VM
-        NUTANIX_ENDPOINT:                                # Prism Central IP address
-        NUTANIX_USER: admin                              # Prism Central username
-        NUTANIX_PASSWORD: ''                             # Prism Central password
-        NUTANIX_PORT: 9440                               # Prism Central port (default: 9440)                                          
-        NUTANIX_PRISM_ELEMENT_CLUSTER_NAME:              # Prism Element cluster name - Ex: PHX-POC207
-        CONTROL_SUBNET:                                  # controlplane subnet name
-        WORKER_SUBNET:                                   # worker subnet name
-        NUTANIX_STORAGE_CONTAINER_NAME:                  # Change to your preferred Prism storage container
-        DS_IP:                                           # Data services IP of the prism element cluster
+    ANSIBLE_HOST_KEY_CHECKING: "False"
+  vars:
+    IMAGE_NAME:                                      # NKP rocky image name(don't use cis image)
+    image_url: ""                                    # URL from nutanix portal for the image name specified above
+    SSH_PUBLIC_KEY: ""                               # SSH key of the local machine, where you run the ansible playbook           
+    NUTANIX_ENDPOINT:                                # Prism Central IP address
+    NUTANIX_USER: admin                              # Prism Central username
+    NUTANIX_PASSWORD: ''                             # Keep the password enclosed between single quotes - Ex: 'password'                                      
+    NUTANIX_PRISM_ELEMENT_CLUSTER_NAME:              # Prism Element cluster name
+    CONTROL_SUBNET:                                  # contorlplane subnet name as per prism
+    WORKER_SUBNET:                                   # worker node pool subnet as per prism
+    NUTANIX_STORAGE_CONTAINER_NAME:                  # The test VMs will be deployed here
+    DS_IP:                                           # Dataservice IP of prism element
+    airgapped: false                                 # Set to true if airgapped, also ensure to upload the VM image manually
+    #management_cluster: "true"                      # If you are running pre-checks for management cluster and want to also check connectivity to workload clusters, then set management_cluster as true and also specify the workload clusters, in specified format.
+    #workload_cluster_subnets:
+    # - ["pe-cluster1", "workload_subnet1"]        
+    # - ["pe-cluster2", "workload_subnet2"]
 ```
 
-    > ⚠️ **Note:** All the variables are mandatory.
+    > ⚠️ Note: This script works for both management and workload clusters.
+
+    1. To use it for a management cluster, set the management_cluster flag to true and provide the list of workload clusters you want to deploy from it.
+
+    2. If you're running the script on a management cluster and don't need to check connectivity with the workload clusters, set the management_cluster flag to false. You can still run the script for the management cluster in this case.
+
+    3. Connectivity between the management cluster and workload clusters can only be checked when the management_cluster flag is set to true and is not applicable for workload clusters.
 
 4. Finally, to trigger the playbook, run the following command:
     ```sh
@@ -54,6 +65,12 @@ Since we are deploying in a Nutanix environment, install the `nutanix.ncp` ansib
     ```
 
 5. Once the playbook completes without any errors, you will get the final nkp_checks_report.html in the same directory.
+
+
+## ⚙️ Ideal Usage
+
+1. First, run the script for the **management cluster**, setting the `management_cluster` flag to `true` and specifying all the workload clusters.
+2. Afterward, run the script individually for each **workload cluster**.
 
 Disclaimer:
 

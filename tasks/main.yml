@@ -25,8 +25,7 @@
   register: result_net2
   when: WORKER_SUBNET is defined and WORKER_SUBNET != ''
 
-
-- name: fetch all clusters info with filter
+- name: fetch prism element cluster details
   nutanix.ncp.ntnx_clusters_info_v2:
     nutanix_host: "{{ NUTANIX_ENDPOINT }}"
     nutanix_username: "{{ NUTANIX_USER }}"
@@ -34,6 +33,24 @@
     validate_certs: false
     filter: "name eq '{{ NUTANIX_PRISM_ELEMENT_CLUSTER_NAME }}'"
   register: pc_result
+
+- name: Set unique workload cluster names
+  set_fact:
+    unique_workload_clusters: "{{ workload_cluster_subnets | map('first') | unique }}"
+  when: management_cluster | bool
+
+- name: Fetch all workload Prism Element cluster info
+  nutanix.ncp.ntnx_clusters_info_v2:
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    filter: "name eq '{{ item }}'"
+  loop: "{{ unique_workload_clusters }}"
+  loop_control:
+    label: "{{ item }}"
+  register: workload_pc_results
+  when: management_cluster | bool
 
 # tasks file for nkp-checks - from here V1
 - name: Check if NKP rocky image is present
@@ -93,12 +110,29 @@
     kind: vm
   register: worker_vm
 
-- name: Fail execution if either VM exists
+- name: Get all VMs
+  nutanix.ncp.ntnx_vms_info:
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    kind: vm
+  register: all_vms
+
+- name: Set VM match counts
+  set_fact:
+    control_vm: >-
+      {{ all_vms.response.entities | selectattr('spec.name', 'equalto', 'nkp_control_test') | list | length }}
+    worker_vm: >-
+      {{ all_vms.response.entities | selectattr('spec.name', 'equalto', 'nkp_worker_test') | list | length }}
+    workload_vm: >-
+      {{ all_vms.response.entities | selectattr('spec.name', 'match', '.*nkp_workload_test$') | list | length }}
+
+
+- name: Fail execution if test VMs already exist
   fail:
-    msg: "One or both of the VMs (nkp_control_test or nkp_worker_test) already exist. Please delete the VMs and retry."
-  when: >
-    (control_vm.response.metadata.total_matches > 0) or
-    (worker_vm.response.metadata.total_matches > 0)
+    msg: "One or more test VMs already exist (nkp-control-test, nkp-worker-test, *nkp-workload-test). Please delete the VMs and retry."
+  when: control_vm | int > 0 or worker_vm | int > 0 or workload_vm | int > 0
 
 - name: Render JSON template
   template:
@@ -184,12 +218,14 @@
       is_overridable: true
   register: workervm_out
 
+- name: print workervm_out
+  debug:
+    var: workervm_out
 
 - name: Extract worker VM IP address
   set_fact:
     workervm_ip: "{{ workervm_out.response.spec.resources.nic_list[0].ip_endpoint_list[0].ip }}"
   when: workervm_out.changed
-
 
 - name: Add new worker VM to in-memory inventory
   ansible.builtin.add_host:
@@ -202,6 +238,61 @@
 - name: Refresh inventory
   ansible.builtin.meta: refresh_inventory
 
+# creating the workload cluster VMs
+- name: Create a VM in each workload subnets
+  nutanix.ncp.ntnx_vms:
+    state: present
+    name: "{{ item.0 }}-{{ item.1 }}-nkp-workload-test"
+    timezone: "UTC"
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    cluster:
+      name: "{{ item.0 }}"
+    networks:
+      - is_connected: true
+        subnet:
+          name: "{{ item.1 }}"
+    disks:
+      - type: "DISK"
+        size_gb: 20
+        clone_image:
+          name: "{{ IMAGE_NAME }}"
+        bus: "SCSI"
+    vcpus: 4
+    cores_per_vcpu: 1
+    memory_gb: 8
+    guest_customization:
+      type: "cloud_init"
+      script_path: "./cloud_init_nkp_checks.yml"
+      is_overridable: true
+  loop: "{{ workload_cluster_subnets }}"
+  register: workload_vm_results
+  when: management_cluster | bool
+
+# Extract IPs and add each VM to the in-memory inventory
+- name: Add all workload VMs to in-memory inventory
+  vars:
+    vm_name: "{{ item.invocation.module_args.name }}"
+    vm_ip: "{{ item.response.spec.resources.nic_list[0].ip_endpoint_list[0].ip }}"
+  loop: "{{ workload_vm_results.results }}"
+  when:
+    - management_cluster | bool
+    - item.changed
+  ansible.builtin.add_host:
+    name: "{{ vm_name }}"
+    groups: nkp_workload
+    ansible_host: "{{ vm_ip }}"
+    ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
+    ansible_user: nutanix
+
+
+# Refresh dynamic inventory
+- name: Refresh in-memory inventory
+  ansible.builtin.meta: refresh_inventory
+
+
 - name: Render JSON template
   template:
     src: templates/port-check-input.json.j2
@@ -212,7 +303,7 @@
     seconds: 30
   delegate_to: "{{ groups['nkp_control'][0] }}"
 
-# Install netcat on both control and worker VMs
+# Install netcat on all the VMs
 - name: Install netcat (nmap-ncat) on control test VM
   yum:
     name: nmap-ncat
@@ -228,6 +319,17 @@
   delegate_to: "{{ groups['nkp_worker'][0] }}"
   become: true
   when: not airgapped | bool
+
+- name: Install netcat (nmap-ncat) on all workload VMs
+  yum:
+    name: nmap-ncat
+    state: present
+  delegate_to: "{{ item }}"
+  become: true
+  loop: "{{ groups['nkp_workload'] | default([]) }}"
+  when:
+    - management_cluster | bool
+    - not airgapped | bool
 
 #for airgappped environment, copy the ncat packages from local
 
@@ -248,6 +350,17 @@
   become: true
   when: airgapped | bool
 
+- name: Copy nmap-ncat RPM to workload vms (airgapped)
+  copy:
+    src: files/nmap-ncat.rpm
+    dest: /tmp/nmap-ncat.rpm
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['nkp_workload'] }}"
+  become: true
+  when:
+    - management_cluster | bool
+    - airgapped | bool
+
 - name: Install netcat on control VM from RPM (airgapped)
   ansible.legacy.dnf:
     name: /tmp/nmap-ncat.rpm
@@ -267,6 +380,18 @@
   become: true
   when: airgapped | bool
 
+- name: Install netcat on all workload VMs from RPM (airgapped)
+  ansible.legacy.dnf:
+    name: /tmp/nmap-ncat.rpm
+    state: present
+    disable_gpg_check: true
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['nkp_workload'] }}"
+  become: true
+  when:
+    - management_cluster | bool
+    - airgapped | bool
+
 
 # create listeners on control VM
 - name: Creating listeners on control VM
@@ -279,6 +404,8 @@
       nc -lk 2380 &
       nc -lk 4240 &
       nc -lk 443 &
+      nc -lk 6443 &
+      nc -lk 8843 &
     ' > /tmp/netcat-listeners.log 2>&1 &
   become: true
   delegate_to: "{{ groups['nkp_control'][0] }}"
@@ -296,6 +423,19 @@
     ' > /tmp/netcat-listeners.log 2>&1 &
   become: true
   delegate_to: "{{ groups['nkp_worker'][0] }}"
+
+# Create netcat listeners on workload VM
+- name: Creating listeners on workload VM
+  ansible.builtin.shell: |
+    nohup bash -c '
+      nc -lk 8843 & 
+      nc -lk 6443 & 
+    ' > /tmp/netcat-listeners.log 2>&1 &
+  become: true
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['nkp_workload'] }}"
+  when:
+    - management_cluster | bool
 
 # copy the python scripts
 - name: Copy port check and UDP parser scripts to control VM
@@ -319,8 +459,20 @@
     - { src: 'templates/port-check.py', dest: '/tmp/port-check.py' }
     - { src: 'templates/udp_log_parser.py', dest: '/tmp/udp_log_parser.py' }
     - { src: './port-check-input.json', dest: '/tmp/port-check-input.json' }
+    - { src: 'files/m-w-port-check.py', dest: '/tmp/m-w-port-check.py' }
   become: true
   delegate_to: "{{ groups['nkp_worker'][0] }}"
+
+- name: Copy port check script to workload VMs
+  ansible.builtin.copy:
+    src: 'files/w-m-port-check.py'
+    dest: '/tmp/w-m-port-check.py'
+    mode: '0755'
+  become: true
+  delegate_to: "{{ item }}"
+  with_items: "{{ groups['nkp_workload'] }}"
+  when:
+    - management_cluster | bool
 
 - name: Cleanup files on the local host
   ansible.builtin.file:
@@ -359,6 +511,27 @@
   become: true
   delegate_to: "{{ groups['nkp_worker'][0] }}"
 
+# check connectivity from worker
+- name: Generate host list in hostname(ip) format
+  set_fact:
+    nkp_dest_hosts: |
+      {% for host in groups['nkp_workload'] %}
+      {{ host }}({{ hostvars[host]['ansible_host'] }})
+      {% endfor %}
+  when:
+    - management_cluster | bool
+
+- name: Run port check script to check connectivity to workload clulsters
+  become: true
+  delegate_to: "{{ groups['nkp_worker'][0] }}"
+  run_once: true
+  shell: |
+    echo "{{ nkp_dest_hosts }}" | python3 /tmp/m-w-port-check.py --source_ip {{ workervm_ip }}
+  register: managment_tcp_out
+  when:
+    - management_cluster | bool
+
+
 # for UDP ports, check if the message reached the control vm
 - name: Run udp log parser to check udp ports from worker to control 
   ansible.builtin.command: >
@@ -369,21 +542,43 @@
   delegate_to: "{{ groups['nkp_control'][0] }}"
 
 
+# check connectivity from worklaod to management cluster
+- name: Run port check script on each to check connectivity to management cluster
+  ansible.builtin.shell: |
+    echo "worker:{{ workervm_ip }},control:{{ controlvm_ip }}" | python3 /tmp/w-m-port-check.py --source_role workload_subnet
+  register: workload_tcp_out
+  changed_when: false
+  become: true
+  delegate_to: "{{ item }}"
+  loop: "{{ groups['nkp_workload'] }}"
+  when:
+    - management_cluster | bool     
+
+
 - name: Combine all connection outputs into one list
   set_fact:
     connections: >-
       {{
-        (control_tcp_out.stdout | from_json)
-        + (control_udp_out.stdout | from_json)
-        + (worker_tcp_out.stdout | from_json)
-        + (worker_udp_out.stdout | from_json)
+        (control_tcp_out.stdout | default('[]') | from_json)
+        + (control_udp_out.stdout | default('[]') | from_json)
+        + (worker_tcp_out.stdout | default('[]') | from_json)
+        + (worker_udp_out.stdout | default('[]') | from_json)
+        + (managment_tcp_out.stdout | default('[]') | from_json)
       }}
+
+- name: Append workload TCP outputs to connections
+  set_fact:
+    connections: "{{ (connections | default([])) + (item.stdout | from_json) }}"
+  loop: "{{ workload_tcp_out.results }}"
+  when:
+    - management_cluster | bool
+    - item.stdout is defined
+
 
 - name: Render HTML report using Jinja2 template
   template:
     src: templates/nkp_checks_output.htm.j2
     dest: ./nkp_checks_report.html
-
 
 # Cleanup the created VMs
 - name: Delete test control VM
@@ -404,3 +599,18 @@
     nutanix_password: "{{ NUTANIX_PASSWORD }}"
     validate_certs: false
     vm_uuid: '{{ workervm_out.vm_uuid }}'
+
+- name: Delete workload VMs
+  nutanix.ncp.ntnx_vms:
+    state: absent
+    nutanix_host: "{{ NUTANIX_ENDPOINT }}"
+    nutanix_username: "{{ NUTANIX_USER }}"
+    nutanix_password: "{{ NUTANIX_PASSWORD }}"
+    validate_certs: false
+    vm_uuid: "{{ item.vm_uuid }}"
+  loop: "{{ workload_vm_results.results }}"
+  loop_control:
+    label: "{{ item.vm_uuid }}"
+  when:
+    - management_cluster | bool
+    - item.changed

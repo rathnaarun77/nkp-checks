@@ -18,7 +18,24 @@
 </head>
 <body>
     <h1>NKP Checks Report</h1>
-    <h2>Cluster Summary - {{ pc_result.response[0].name }}</h1>
+
+    <div class="section-title">Input Parameters</div>
+    <table>
+        <tr><th>Airgapped</th><td>{{ airgapped }}</td></tr>
+        <tr><th>Management Cluster</th><td>{{ management_cluster }}</td></tr>
+        <tr>
+            <th>Workload Cluster Subnets</th>
+            <td>
+                <ul>
+                    {% for pair in workload_cluster_subnets %}
+                        <li>{{ pair[0] }} - {{ pair[1] }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    </table>
+
+    <h2>Cluster Summary - {{ pc_result.response[0].name }}</h2>
 
     <div class="section-title">Cluster Details</div>
     <table>

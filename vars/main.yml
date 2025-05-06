@@ -1,2 +1,23 @@
 ---
 # vars file for nkp-checks
+#image_url:                                       # url to download image from nutanix portal 
+#IMAGE_NAME:                                      # Image name - corresponding to the above url
+#SSH_PUBLIC_KEY:                                  # SSH key of the local machine,used by ansible to connect to the test VM
+#NUTANIX_ENDPOINT:                                # Prism Central IP address
+#NUTANIX_USER: admin                              # Prism Central username
+#NUTANIX_PASSWORD: ''                             # Prism Central password
+#NUTANIX_PORT: 9440                               # Prism Central port (default: 9440)                                          
+#NUTANIX_PRISM_ELEMENT_CLUSTER_NAME:              # Prism Element cluster name - Ex: PHX-POC207
+#CONTROL_SUBNET:                                  # controlplane subnet name
+#WORKER_SUBNET:                                   # worker subnet name
+#NUTANIX_STORAGE_CONTAINER_NAME:                  # Change to your preferred Prism storage container
+#DS_IP:                                           # Dataservices IP of the prism element cluster
+#airgapped: "false"                               # Change to true if airgapped environment
+#registry:                                        # Private Image registry if airgapped
+
+# If you are running pre-checks for management cluster and want to also check connectivity to workload clusters, then set management_cluster as true and also specify the workload clusters, in specified format.
+
+#management_cluster: "true"                      
+#workload_cluster_subnets:
+# - ["pe-cluster1", "workload_subnet1"]        
+# - ["pe-cluster2", "workload_subnet2"]

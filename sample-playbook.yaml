@@ -18,4 +18,6 @@
     NUTANIX_STORAGE_CONTAINER_NAME:                  # Change to your preferred Prism storage container
     DS_IP:                                           # Dataservices IP of the prism element cluster
     airgapped: "false"                               # Change to true if airgapped environment
-    #registry:                                        # Private Image registry if airgapped
+    #registry:                                       # Private Image registry if airgapped
+    #management_cluster: "true"                      # set to true if testing for management cluster
+    #workload_cluster_subnets: ""                    # If management_cluster is set to true, then specify the list of workload cluster subnets (cluster1:subnet1,cluster2:subnet2)
