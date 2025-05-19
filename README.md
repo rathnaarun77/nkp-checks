@@ -33,6 +33,7 @@ Since we are deploying in a Nutanix environment, install the `nutanix.ncp` ansib
   environment:
     ANSIBLE_HOST_KEY_CHECKING: "False"
   vars:
+    #ansible_python_interpreter: /root/.local/pipx/venvs/ansible-core/bin/python    # facultative, python_interpreter path if you're using different python interpreter and/or from venv.
     IMAGE_NAME:                                      # NKP rocky image name(don't use cis image)
     image_url: ""                                    # URL from nutanix portal for the image name specified above
     SSH_PUBLIC_KEY: ""                               # SSH key of the local machine, where you run the ansible playbook           
